@@ -4,7 +4,10 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
+#include "GroomComponent.h"
+
 
 #include "Characters/OlympiusCharacter.h"
 
@@ -12,12 +15,27 @@
 AOlympiusCharacter::AOlympiusCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
+
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 400.0f, 0.0f);
+
 	CameraArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraArm"));
 	CameraArm->SetupAttachment(GetRootComponent());
 	CameraArm->TargetArmLength = 300.0f;
-
 	ViewCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("ViewCamera"));
 	ViewCamera->SetupAttachment(CameraArm);
+
+	Hair = CreateDefaultSubobject<UGroomComponent>(TEXT("Hair"));
+	Hair->SetupAttachment(GetMesh());
+	Hair->AttachmentName = FString("Head");
+	
+	Eyebrows = CreateDefaultSubobject<UGroomComponent>(TEXT("Eyebrows"));
+	Eyebrows->SetupAttachment(GetMesh());
+	Eyebrows->AttachmentName = FString("Head");
 }
 
 void AOlympiusCharacter::Tick(float DeltaTime)
@@ -40,11 +58,13 @@ void AOlympiusCharacter::BeginPlay()
 void AOlympiusCharacter::Move(const FInputActionValue& value)
 {
 	const FVector2D movementVector = value.Get<FVector2D>();
+	
 	const FRotator rotation = Controller->GetControlRotation();
 	const FRotator yawRotation(0.0f, rotation.Yaw, 0.0f);
+
 	const FVector forwardDirection = FRotationMatrix(yawRotation).GetUnitAxis(EAxis::X);
-	const FVector rightDirection = FRotationMatrix(yawRotation).GetUnitAxis(EAxis::Y);
 	AddMovementInput(forwardDirection, movementVector.Y);
+	const FVector rightDirection = FRotationMatrix(yawRotation).GetUnitAxis(EAxis::Y);
 	AddMovementInput(rightDirection, movementVector.X);
 }
 

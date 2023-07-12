@@ -12,6 +12,7 @@ class UInputAction;
 class UInputMappingContext;
 class USpringArmComponent;
 class UCameraComponent;
+class UGroomComponent;
 
 UCLASS()
 class PROJECTOLYMPIUS_API AOlympiusCharacter : public ACharacter
@@ -56,4 +57,10 @@ private:
 		TObjectPtr<USpringArmComponent> CameraArm;
 	UPROPERTY(VisibleAnywhere)
 		TObjectPtr<UCameraComponent> ViewCamera;
+
+	//Hair and Eyebrows
+	UPROPERTY(VisibleAnywhere, Category = Hair)
+		TObjectPtr<UGroomComponent> Hair;
+	UPROPERTY(VisibleAnywhere, Category = Hair)
+		TObjectPtr<UGroomComponent> Eyebrows;
 };
