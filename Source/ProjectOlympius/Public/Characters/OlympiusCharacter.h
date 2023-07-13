@@ -1,5 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+/*
+Author(s): Kody Wood
+Description: Functionalty for the main character
+*/
 #pragma once
 
 #include "CoreMinimal.h"

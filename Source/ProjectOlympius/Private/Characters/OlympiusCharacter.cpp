@@ -1,4 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+/*
+Author(s): Kody Wood
+Description: CPP for the main character
+*/
 
 #include "Components/InputComponent.h"
 #include "EnhancedInputComponent.h"
@@ -77,7 +80,7 @@ void AOlympiusCharacter::Look(const FInputActionValue& value)
 
 void AOlympiusCharacter::Jump()
 {
-	UE_LOG(LogTemp,Warning,TEXT("Jump"));
+	Super::Jump();
 }
 
 void AOlympiusCharacter::Attack()
