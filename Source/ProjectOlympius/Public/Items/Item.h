@@ -8,6 +8,8 @@ Description: Functionalty for the item actor
 #include "GameFramework/Actor.h"
 #include "Item.generated.h"
 
+//Forward Declarations
+class USphereComponent;
 
 UCLASS()
 class PROJECTOLYMPIUS_API AItem : public AActor
@@ -35,6 +37,11 @@ protected:
 	template<typename T>
 	T Average(T first, T second);
 
+	UFUNCTION()
+	void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
+	void OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
 
 private:
 
@@ -43,6 +50,8 @@ private:
 
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UStaticMeshComponent> RootItemMesh;
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USphereComponent> Sphere;
 
 };
 
