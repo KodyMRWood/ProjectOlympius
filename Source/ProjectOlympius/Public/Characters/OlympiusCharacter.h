@@ -5,8 +5,9 @@ Description: Functionalty for the main character
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "CharacterTypes.h"
 #include "InputActionValue.h"
+#include "GameFramework/Character.h"
 #include "OlympiusCharacter.generated.h"
 
 //Forward Declarations
@@ -15,6 +16,8 @@ class UInputMappingContext;
 class USpringArmComponent;
 class UCameraComponent;
 class UGroomComponent;
+class AItem;
+
 
 UCLASS()
 class PROJECTOLYMPIUS_API AOlympiusCharacter : public ACharacter
@@ -65,4 +68,13 @@ private:
 		TObjectPtr<UGroomComponent> Hair;
 	UPROPERTY(VisibleAnywhere, Category = Hair)
 		TObjectPtr<UGroomComponent> Eyebrows;
+
+	UPROPERTY(VisibleInstanceOnly)
+	TObjectPtr<AItem> OverlappingItem;
+
+	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
+
+public:
+	FORCEINLINE void SetOverlappingItem(TObjectPtr<AItem> Item) { OverlappingItem = Item; }
+	FORCEINLINE ECharacterState GetCharacterState()  const { return CharacterState; }
 };

@@ -5,6 +5,7 @@ Description: Handles the animations for the main character
 */
 
 #include "CoreMinimal.h"
+#include "CharacterTypes.h"
 #include "Animation/AnimInstance.h"
 #include "OlympiusAnimInstance.generated.h"
 
@@ -29,4 +30,7 @@ public:
 	float groundSpeed;
 	UPROPERTY(BlueprintReadOnly, Category = Movement)
 	bool isFalling;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Movement | Character State");
+	ECharacterState CharacterState;
 };

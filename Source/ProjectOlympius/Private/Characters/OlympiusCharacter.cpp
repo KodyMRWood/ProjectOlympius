@@ -10,6 +10,8 @@ Description: CPP for the main character
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Camera/CameraComponent.h"
 #include "GroomComponent.h"
+#include "Items/Item.h"
+#include "Items/Weapons/Weapon.h"
 
 
 #include "Characters/OlympiusCharacter.h"
@@ -96,6 +98,12 @@ void AOlympiusCharacter::Dodge()
 void AOlympiusCharacter::EPressed()
 {
 	UE_LOG(LogTemp, Warning, TEXT("E Pressed"));
+	TObjectPtr<AWeapon> OverlappingWeapon = Cast<AWeapon>(OverlappingItem);
+	if (OverlappingWeapon)
+	{
+		OverlappingWeapon->Equip(GetMesh(), FName("RightHandSocket"));
+		CharacterState = ECharacterState::ECS_EquippedOneHandedWeapon;
+	}
 }
 
 void AOlympiusCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

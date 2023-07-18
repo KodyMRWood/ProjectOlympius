@@ -28,5 +28,6 @@ void UOlympiusAnimInstance::NativeUpdateAnimation(float deltaTime)
 	{
 		groundSpeed = UKismetMathLibrary::VSizeXY(MainCharacterMovement->Velocity);
 		isFalling = MainCharacterMovement->IsFalling();
+		CharacterState = MainCharacter->GetCharacterState();
 	}
 }

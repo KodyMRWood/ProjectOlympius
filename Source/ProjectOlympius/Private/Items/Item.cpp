@@ -7,6 +7,7 @@ Description: Functionalty for the item actor
 #include "UObject/ObjectPtr.h"
 #include "Components/SphereComponent.h"
 #include "ProjectOlympius/DebugMacros.h"
+#include "Characters/OlympiusCharacter.h"
 
 AItem::AItem()
 {
@@ -39,19 +40,19 @@ float AItem::TransformedCos()
 
 void AItem::OnSphereOverlap(UPrimitiveComponent* OverlapperComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	const FString OtherActorName = OtherActor->GetName();
-	if (GEngine)
+	TObjectPtr<AOlympiusCharacter> OlympiusCharacter = Cast<AOlympiusCharacter>(OtherActor);
+	if (OlympiusCharacter)
 	{
-		GEngine->AddOnScreenDebugMessage(1, 30.0f, FColor::Purple, OtherActorName);
+		OlympiusCharacter->SetOverlappingItem(this);
 	}
 }
 
 void AItem::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	const FString OtherActorName = OtherActor->GetName();
-	if (GEngine)
+	TObjectPtr<AOlympiusCharacter> OlympiusCharacter = Cast<AOlympiusCharacter>(OtherActor);
+	if (OlympiusCharacter)
 	{
-		GEngine->AddOnScreenDebugMessage(1, 30.0f, FColor::Green, OtherActorName);
+		OlympiusCharacter->SetOverlappingItem(nullptr);
 	}
 }
 
