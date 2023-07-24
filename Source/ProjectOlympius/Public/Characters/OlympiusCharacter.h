@@ -17,6 +17,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UGroomComponent;
 class AItem;
+class UAnimMontage;
 
 
 UCLASS()
@@ -47,7 +48,6 @@ protected:
 	TObjectPtr<UInputAction> DodgeAction;
 	UPROPERTY(EditAnywhere, Category = Input)
 	TObjectPtr<UInputAction> EPressedAction;
-
 	void Move(const FInputActionValue& value);
 	void Look(const FInputActionValue& value);
 	virtual void Jump() override;
@@ -55,6 +55,11 @@ protected:
 	void Dodge();
 	void EPressed();
 
+	//--- Montage Functions ---//
+	void PlayAttackMontage();
+	UFUNCTION(BlueprintCallable)
+	void AttackEnd();
+	bool CanAttack();
 
 private:
 	//Spring Arm and Camera
@@ -72,7 +77,14 @@ private:
 	UPROPERTY(VisibleInstanceOnly)
 	TObjectPtr<AItem> OverlappingItem;
 
+	//--- Character States (Animations) ---//
 	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
+	UPROPERTY(BlueprintReadWrite, meta=(AllowPrivateAccess = "true"))
+	EActionState ActionState = EActionState::EAS_Unoccupied;
+
+	//--- Animation Montages ---//
+	UPROPERTY(EditDefaultsOnly, Category = Montages)
+	TObjectPtr<UAnimMontage> AttackMontage;
 
 public:
 	FORCEINLINE void SetOverlappingItem(TObjectPtr<AItem> Item) { OverlappingItem = Item; }

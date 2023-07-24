@@ -11,6 +11,12 @@ Description: Functionalty for the item actor
 //Forward Declarations
 class USphereComponent;
 
+enum class EItemState :uint8
+{
+	EIS_Hovering,
+	EIs_Equipped
+};
+
 UCLASS()
 class PROJECTOLYMPIUS_API AItem : public AActor
 {
@@ -45,12 +51,14 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<UStaticMeshComponent> RootItemMesh;
 
+	//--- Item States ---//
+	EItemState ItemState = EItemState::EIS_Hovering;
+
 private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	float m_RunningTime = 0.0f;
 
-	
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USphereComponent> Sphere;
 

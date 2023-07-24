@@ -12,6 +12,7 @@ Description: CPP for the main character
 #include "GroomComponent.h"
 #include "Items/Item.h"
 #include "Items/Weapons/Weapon.h"
+#include "Animation/AnimMontage.h"
 
 
 #include "Characters/OlympiusCharacter.h"
@@ -62,15 +63,16 @@ void AOlympiusCharacter::BeginPlay()
 
 void AOlympiusCharacter::Move(const FInputActionValue& value)
 {
+	if (ActionState == EActionState::EAS_Attacking) return;
+
 	const FVector2D movementVector = value.Get<FVector2D>();
-	
 	const FRotator rotation = Controller->GetControlRotation();
 	const FRotator yawRotation(0.0f, rotation.Yaw, 0.0f);
-
 	const FVector forwardDirection = FRotationMatrix(yawRotation).GetUnitAxis(EAxis::X);
 	AddMovementInput(forwardDirection, movementVector.Y);
 	const FVector rightDirection = FRotationMatrix(yawRotation).GetUnitAxis(EAxis::Y);
 	AddMovementInput(rightDirection, movementVector.X);
+	//ActionState = EActionState::EAS_Moving;
 }
 
 void AOlympiusCharacter::Look(const FInputActionValue& value)
@@ -83,11 +85,22 @@ void AOlympiusCharacter::Look(const FInputActionValue& value)
 void AOlympiusCharacter::Jump()
 {
 	Super::Jump();
+	//ActionState = EActionState::EAS_Jumping;
 }
 
 void AOlympiusCharacter::Attack()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Attacks"));
+	if(CanAttack())
+	{
+		PlayAttackMontage();
+		ActionState = EActionState::EAS_Attacking;
+	}
+}
+
+bool AOlympiusCharacter::CanAttack()
+{
+	return ActionState == EActionState::EAS_Unoccupied &&
+		   CharacterState != ECharacterState::ECS_Unequipped;
 }
 
 void AOlympiusCharacter::Dodge()
@@ -104,6 +117,40 @@ void AOlympiusCharacter::EPressed()
 		OverlappingWeapon->Equip(GetMesh(), FName("RightHandSocket"));
 		CharacterState = ECharacterState::ECS_EquippedOneHandedWeapon;
 	}
+}
+
+void AOlympiusCharacter::PlayAttackMontage()
+{
+	TObjectPtr<UAnimInstance> AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance && AttackMontage)
+	{
+		AnimInstance->Montage_Play(AttackMontage);
+		const int32 selection = FMath::RandRange(0, 4);
+		FName SectionName = FName();
+		switch (selection)
+		{
+		case 0:
+			SectionName = FName("Attack1");
+			break;
+		case 1:
+			SectionName = FName("Attack2");
+			break;
+		case 2:
+			SectionName = FName("Attack3");
+			break;
+		case 3:
+			SectionName = FName("Attack4");
+			break;
+		default:
+			break;
+		}
+		AnimInstance->Montage_JumpToSection(SectionName, AttackMontage);
+	}
+}
+
+void AOlympiusCharacter::AttackEnd()
+{
+	ActionState = EActionState::EAS_Unoccupied;
 }
 
 void AOlympiusCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
