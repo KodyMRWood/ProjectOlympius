@@ -16,8 +16,9 @@ class UInputMappingContext;
 class USpringArmComponent;
 class UCameraComponent;
 class UGroomComponent;
-class AItem;
 class UAnimMontage;
+class AItem;
+class AWeapon;
 
 
 UCLASS()
@@ -57,9 +58,12 @@ protected:
 
 	//--- Montage Functions ---//
 	void PlayAttackMontage();
+	void PlayEquipMontage(FName SectionName);
 	UFUNCTION(BlueprintCallable)
 	void AttackEnd();
 	bool CanAttack();
+	bool CanUnequip();
+	bool CanEquip();
 
 private:
 	//Spring Arm and Camera
@@ -85,6 +89,13 @@ private:
 	//--- Animation Montages ---//
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	TObjectPtr<UAnimMontage> AttackMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = Montages)
+	TObjectPtr<UAnimMontage> EquipMontage;
+
+	//--- Equipment ---//
+	UPROPERTY(VisibleAnywhere, Category = Weapon)
+	TObjectPtr<AWeapon> EquippedWeapon;
 
 public:
 	FORCEINLINE void SetOverlappingItem(TObjectPtr<AItem> Item) { OverlappingItem = Item; }
