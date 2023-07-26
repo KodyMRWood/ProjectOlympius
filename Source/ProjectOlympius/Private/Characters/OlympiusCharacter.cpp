@@ -63,7 +63,7 @@ void AOlympiusCharacter::BeginPlay()
 
 void AOlympiusCharacter::Move(const FInputActionValue& value)
 {
-	if (ActionState == EActionState::EAS_Attacking) return;
+	if (ActionState != EActionState::EAS_Unoccupied) return;
 
 	const FVector2D movementVector = value.Get<FVector2D>();
 	const FRotator rotation = Controller->GetControlRotation();
@@ -124,11 +124,13 @@ void AOlympiusCharacter::EPressed()
 		{
 			PlayEquipMontage(FName("Unequip"));
 			CharacterState = ECharacterState::ECS_Unequipped;
+			ActionState = EActionState::EAS_Equipping;
 		}
 		else if (CanEquip())
 		{
 			PlayEquipMontage(FName("Equip"));
 			CharacterState = ECharacterState::ECS_EquippedOneHandedWeapon;
+			ActionState = EActionState::EAS_Equipping;
 		}
 	}
 }
@@ -140,6 +142,27 @@ bool AOlympiusCharacter::CanUnequip()
 bool AOlympiusCharacter::CanEquip()
 {
 	return ActionState == EActionState::EAS_Unoccupied && CharacterState == ECharacterState::ECS_Unequipped && EquippedWeapon;
+}
+
+void AOlympiusCharacter::UnequipItem()
+{
+	if (EquippedWeapon)
+	{
+		EquippedWeapon->AttachMeshToSocket(GetMesh(), FName("SpineSocket"));
+	}
+}
+
+void AOlympiusCharacter::EquipItem()
+{
+	if (EquippedWeapon)
+	{
+		EquippedWeapon->AttachMeshToSocket(GetMesh(), FName("RightHandSocket"));
+	}
+}
+
+void AOlympiusCharacter::FinishEquipping()
+{
+	ActionState = EActionState::EAS_Unoccupied;
 }
 
 void AOlympiusCharacter::PlayAttackMontage()

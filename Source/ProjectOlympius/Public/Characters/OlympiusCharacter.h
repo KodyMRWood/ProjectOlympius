@@ -64,6 +64,12 @@ protected:
 	bool CanAttack();
 	bool CanUnequip();
 	bool CanEquip();
+	UFUNCTION(BlueprintCallable)
+	void UnequipItem();
+	UFUNCTION(BlueprintCallable)
+	void EquipItem();
+	UFUNCTION(BlueprintCallable)
+	void FinishEquipping();
 
 private:
 	//Spring Arm and Camera
