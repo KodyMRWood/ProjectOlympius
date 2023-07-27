@@ -21,6 +21,8 @@ public:
 	AWeapon();
 	void Equip(TObjectPtr<USceneComponent> InParent, FName InSocketName);
 	void AttachMeshToSocket(TObjectPtr<USceneComponent> InParent, const FName& InSocketName);
+
+	FORCEINLINE TObjectPtr<UBoxComponent> GetWeaponBox() const { return WeaponBox; }
 protected:
 	virtual void BeginPlay() override;
 	void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
