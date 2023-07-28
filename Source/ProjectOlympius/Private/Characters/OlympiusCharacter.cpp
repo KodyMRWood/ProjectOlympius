@@ -195,7 +195,7 @@ void AOlympiusCharacter::PlayAttackMontage()
 	}
 }
 
-void AOlympiusCharacter::PlayEquipMontage(FName SectionName)
+void AOlympiusCharacter::PlayEquipMontage(const FName& SectionName)
 {
 	TObjectPtr<UAnimInstance> AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance && EquipMontage)
