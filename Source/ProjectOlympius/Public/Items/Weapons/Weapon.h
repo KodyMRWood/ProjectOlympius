@@ -22,6 +22,8 @@ public:
 	void Equip(TObjectPtr<USceneComponent> InParent, FName InSocketName);
 	void AttachMeshToSocket(TObjectPtr<USceneComponent> InParent, const FName& InSocketName);
 
+	TArray<TObjectPtr<AActor>> IgnoreActors;
+
 	FORCEINLINE TObjectPtr<UBoxComponent> GetWeaponBox() const { return WeaponBox; }
 protected:
 	virtual void BeginPlay() override;

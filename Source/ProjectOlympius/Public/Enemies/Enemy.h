@@ -24,7 +24,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void GetHit(const FVector& ImpactPoint) override;
-
+	virtual void DirectionalHitReact(const FVector & ImpactPoint);
 	void PlayOnHitMontage(const FName& SectionName);
 private:	
 
