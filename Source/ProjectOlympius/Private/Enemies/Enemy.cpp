@@ -2,6 +2,7 @@
 #include "Components/CapsuleComponent.h"
 #include "ProjectOlympius/DebugMacros.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/GameplayStatics.h"
 #include "Enemies/Enemy.h"
 
 
@@ -26,6 +27,23 @@ void AEnemy::BeginPlay()
 void AEnemy::GetHit(const FVector& ImpactPoint)
 {
 	DirectionalHitReact(ImpactPoint);
+	if (HitSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(
+			this,
+			HitSound,
+			ImpactPoint
+		);
+	}
+	if (HitParticles && GetWorld())
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(
+			GetWorld(),
+			HitParticles,
+			ImpactPoint
+		);
+	}
+
 }
 
 void AEnemy::DirectionalHitReact(const FVector& ImpactPoint)
@@ -60,13 +78,13 @@ void AEnemy::DirectionalHitReact(const FVector& ImpactPoint)
 	PlayOnHitMontage(FName(section));
 
 	//Debugging
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(1, 5.0f, FColor::Purple, FString::Printf(TEXT("Theta: %f"), theta));
-	}
-	UKismetSystemLibrary::DrawDebugArrow(this, GetActorLocation(), GetActorLocation() + crossProduct * 100.0f, 5.0f, FColor::Green, 5.0f);
-	UKismetSystemLibrary::DrawDebugArrow(this, GetActorLocation(), GetActorLocation() + forward * 60.0f, 5.0f, FColor::Green, 5.0f);
-	UKismetSystemLibrary::DrawDebugArrow(this, GetActorLocation(), GetActorLocation() + toHit * 60.0f, 5.0f, FColor::Orange, 5.0f);
+	//if (GEngine)
+	//{
+	//	GEngine->AddOnScreenDebugMessage(1, 5.0f, FColor::Purple, FString::Printf(TEXT("Theta: %f"), theta));
+	//}
+	//UKismetSystemLibrary::DrawDebugArrow(this, GetActorLocation(), GetActorLocation() + crossProduct * 100.0f, 5.0f, FColor::Green, 5.0f);
+	//UKismetSystemLibrary::DrawDebugArrow(this, GetActorLocation(), GetActorLocation() + forward * 60.0f, 5.0f, FColor::Green, 5.0f);
+	//UKismetSystemLibrary::DrawDebugArrow(this, GetActorLocation(), GetActorLocation() + toHit * 60.0f, 5.0f, FColor::Orange, 5.0f);
 }
 
 void AEnemy::PlayOnHitMontage(const FName& SectionName)

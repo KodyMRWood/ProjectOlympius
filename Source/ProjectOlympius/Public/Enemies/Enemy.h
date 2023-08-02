@@ -24,13 +24,18 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void GetHit(const FVector& ImpactPoint) override;
-	virtual void DirectionalHitReact(const FVector & ImpactPoint);
+	virtual void DirectionalHitReact(const FVector& ImpactPoint);
 	void PlayOnHitMontage(const FName& SectionName);
-private:	
+
+private:
 
 	//--- Animation Montages ---//
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
-	TObjectPtr<UAnimMontage> OnHitMontage;
+		TObjectPtr<UAnimMontage> OnHitMontage;
 
+	UPROPERTY(EditAnywhere, Category = Sounds)
+		TObjectPtr<USoundBase> HitSound;
 
+	UPROPERTY(EditAnywhere, Category = VisualEffects)
+		TObjectPtr<UParticleSystem> HitParticles;
 };
