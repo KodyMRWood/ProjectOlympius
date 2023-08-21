@@ -1,5 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+/*
+Author(s): Kody Wood
+Description: Parent class for all treasure actors types
+*/
 #pragma once
 
 #include "CoreMinimal.h"
@@ -19,4 +21,7 @@ protected:
 private:
 	UPROPERTY(EditAnywhere, Category = Sounds)
 		TObjectPtr<USoundBase> PickupSound;
+
+	UPROPERTY(EditAnywhere, category = "Treasure Properties")
+		uint32 GoldAmount;
 };
