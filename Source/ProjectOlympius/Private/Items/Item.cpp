@@ -4,6 +4,7 @@ Description: Functionalty for the item actor
 */
 
 #include "Items/Item.h"
+#include "NiagaraComponent.h"
 #include "UObject/ObjectPtr.h"
 #include "Components/SphereComponent.h"
 #include "ProjectOlympius/DebugMacros.h"
@@ -19,6 +20,9 @@ AItem::AItem()
 
 	Sphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
 	Sphere->SetupAttachment(GetRootComponent());
+
+	PickUpParticles = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Pick Up Particles"));
+	PickUpParticles->SetupAttachment(GetRootComponent());
 }
 
 void AItem::BeginPlay()

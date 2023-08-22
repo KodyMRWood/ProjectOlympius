@@ -7,6 +7,7 @@
 #include "Components/BoxComponent.h"
 #include "Components/SphereComponent.h"
 #include "Characters/OlympiusCharacter.h"
+#include "NiagaraComponent.h"
 #include "Interfaces/HitInterface.h"
 
 AWeapon::AWeapon()
@@ -39,6 +40,10 @@ void AWeapon::Equip(TObjectPtr<USceneComponent> InParent, FName InSocketName)
 	if (Sphere)
 	{
 		Sphere->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+	if (PickUpParticles)
+	{
+		PickUpParticles->Deactivate();
 	}
 }
 

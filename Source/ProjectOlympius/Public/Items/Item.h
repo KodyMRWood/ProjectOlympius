@@ -10,6 +10,7 @@ Description: Functionalty for the item actor
 
 //Forward Declarations
 class USphereComponent;
+class UNiagaraComponent;
 
 enum class EItemState :uint8
 {
@@ -56,6 +57,10 @@ protected:
 
 	//--- Item States ---//
 	EItemState ItemState = EItemState::EIS_Hovering;
+
+	//--- Particle System ---//
+	UPROPERTY(EditAnywhere)
+		TObjectPtr<UNiagaraComponent> PickUpParticles;
 
 private:
 
