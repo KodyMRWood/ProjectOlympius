@@ -1,5 +1,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/AttributeComponent.h"
+#include "HUD/HealthBarComponent.h"
 #include "ProjectOlympius/DebugMacros.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
@@ -15,6 +17,10 @@ AEnemy::AEnemy()
 	GetMesh()->SetGenerateOverlapEvents(true);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 
+	Attributes = CreateDefaultSubobject<UAttributeComponent>(TEXT("Attribute Component"));
+
+	HealthBar = CreateDefaultSubobject<UHealthBarComponent>(TEXT("Health Bar"));
+	HealthBar->SetupAttachment(GetRootComponent());
 }
 
 
@@ -22,6 +28,10 @@ void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	if (HealthBar)
+	{
+		HealthBar->SetHealthPercent(1.0f);
+	}
 }
 
 void AEnemy::GetHit_Implementation(const FVector& ImpactPoint)

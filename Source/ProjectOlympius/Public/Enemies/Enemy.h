@@ -10,6 +10,8 @@ Description: Parent class for all enemy types
 #include "Enemy.generated.h"
 
 class UAnimeMontage;
+class UAttributeComponent;
+class UHealthBarComponent;
 
 UCLASS()
 class PROJECTOLYMPIUS_API AEnemy : public ACharacter, public IHitInterface
@@ -28,6 +30,11 @@ protected:
 	void PlayOnHitMontage(const FName& SectionName);
 
 private:
+	//--- Components ---//
+	UPROPERTY(VisibleAnywhere)
+		TObjectPtr<UAttributeComponent> Attributes;
+	UPROPERTY(VisibleAnywhere)
+		TObjectPtr<UHealthBarComponent> HealthBar;
 
 	//--- Animation Montages ---//
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
