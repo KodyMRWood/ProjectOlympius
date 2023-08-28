@@ -19,7 +19,7 @@ class PROJECTOLYMPIUS_API AWeapon : public AItem
 	GENERATED_BODY()
 public:
 	AWeapon();
-	void Equip(TObjectPtr<USceneComponent> InParent, FName InSocketName);
+	void Equip(TObjectPtr<USceneComponent> InParent, FName InSocketName, AActor* NewOwner, APawn* NewInstigator);
 	void AttachMeshToSocket(TObjectPtr<USceneComponent> InParent, const FName& InSocketName);
 
 	TArray<TObjectPtr<AActor>> IgnoreActors;
@@ -40,12 +40,17 @@ protected:
 		void CreateFields(const FVector& FieldLocation);
 
 private:
+	//--- Weapon Properties ---//
 	UPROPERTY(EditAnywhere, Category ="Weapon Properties")
 	TObjectPtr<USoundBase> EquipSound;
+	UPROPERTY(EditAnywhere, Category = " Weapon Properties")
+	float Damage = 20.0f;
+
 	UPROPERTY(VisibleAnywhere, Category = "Weapon Properties")
 	TObjectPtr<UBoxComponent> WeaponBox;
 	UPROPERTY(VisibleAnywhere)
 		TObjectPtr<USceneComponent> BoxTraceStart;
 	UPROPERTY(VisibleAnywhere)
 		TObjectPtr<USceneComponent> BoxTraceEnd;
+
 };

@@ -121,3 +121,13 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
+float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInistigator, AActor* DamageCauser)
+{
+	if (Attributes && HealthBar)
+	{
+		Attributes->ReceiveDamage(DamageAmount);
+		HealthBar->SetHealthPercent(Attributes->GetHealthPercent());
+	}
+	return DamageAmount;
+}
+
