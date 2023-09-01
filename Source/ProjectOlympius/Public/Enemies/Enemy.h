@@ -11,6 +11,7 @@ Description: Parent class for all enemy types
 #include "Enemy.generated.h"
 
 class UAnimeMontage;
+class AAIController;
 class UAttributeComponent;
 class UHealthBarComponent;
 
@@ -60,4 +61,14 @@ private:
 		TObjectPtr<AActor> Target;
 	UPROPERTY(EditAnywhere)
 		double FollowRadius = 500.0f;
+
+	//--- Navigation ---//
+	UPROPERTY(EditInstanceOnly, Category = "AI Navigation")
+	TObjectPtr<AActor> CurrentPatrolTarget;
+
+	UPROPERTY(EditInstanceOnly, Category = "AI Navigation")
+		TArray<TObjectPtr<AActor>> PartrolTargets;
+
+	UPROPERTY()
+	TObjectPtr<AAIController> EnemyController;
 };

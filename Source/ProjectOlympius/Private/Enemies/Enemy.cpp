@@ -1,10 +1,12 @@
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Components/SkeletalMeshComponent.h"
-#include "Components/CapsuleComponent.h"
 #include "Components/AttributeComponent.h"
-#include "HUD/HealthBarComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "ProjectOlympius/DebugMacros.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "HUD/HealthBarComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "AIController.h"
 #include "Enemies/Enemy.h"
 
 
@@ -21,6 +23,11 @@ AEnemy::AEnemy()
 
 	HealthBar = CreateDefaultSubobject<UHealthBarComponent>(TEXT("Health Bar"));
 	HealthBar->SetupAttachment(GetRootComponent());
+
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
 }
 
 
@@ -32,6 +39,22 @@ void AEnemy::BeginPlay()
 	{
 		HealthBar->SetHealthPercent(1.0f);
 		HealthBar->SetVisibility(false);
+	}
+
+	EnemyController = Cast<AAIController>(GetController());
+	if (EnemyController && CurrentPatrolTarget)
+	{
+		FAIMoveRequest MoveRequest;
+		MoveRequest.SetGoalActor(CurrentPatrolTarget);
+		MoveRequest.SetAcceptanceRadius(15.0f);
+		FNavPathSharedPtr NavPath;
+		EnemyController->MoveTo(MoveRequest, &NavPath);
+		TArray<FNavPathPoint>& PathPoints = NavPath->GetPathPoints();
+		for (auto& Point : PathPoints)
+		{
+			const FVector& Location = Point.Location;
+			DRAW_DEBUG_SPHERE(Location );
+		}
 	}
 }
 
