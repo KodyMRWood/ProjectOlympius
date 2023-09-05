@@ -42,20 +42,11 @@ void AEnemy::BeginPlay()
 	}
 
 	EnemyController = Cast<AAIController>(GetController());
-	if (EnemyController && CurrentPatrolTarget)
+	if (CurrentPatrolTarget == nullptr)
 	{
-		FAIMoveRequest MoveRequest;
-		MoveRequest.SetGoalActor(CurrentPatrolTarget);
-		MoveRequest.SetAcceptanceRadius(15.0f);
-		FNavPathSharedPtr NavPath;
-		EnemyController->MoveTo(MoveRequest, &NavPath);
-		TArray<FNavPathPoint>& PathPoints = NavPath->GetPathPoints();
-		for (auto& Point : PathPoints)
-		{
-			const FVector& Location = Point.Location;
-			DRAW_DEBUG_SPHERE(Location );
-		}
+		CurrentPatrolTarget = ChoosePatrolTarget();
 	}
+	MoveToTarget(CurrentPatrolTarget);
 }
 
 void AEnemy::OnDeath()
@@ -162,14 +153,6 @@ void AEnemy::DirectionalHitReact(const FVector& ImpactPoint)
 
 	PlayOnHitMontage(FName(section));
 
-	//Debugging
-	//if (GEngine)
-	//{
-	//	GEngine->AddOnScreenDebugMessage(1, 5.0f, FColor::Purple, FString::Printf(TEXT("Theta: %f"), theta));
-	//}
-	//UKismetSystemLibrary::DrawDebugArrow(this, GetActorLocation(), GetActorLocation() + crossProduct * 100.0f, 5.0f, FColor::Green, 5.0f);
-	//UKismetSystemLibrary::DrawDebugArrow(this, GetActorLocation(), GetActorLocation() + forward * 60.0f, 5.0f, FColor::Green, 5.0f);
-	//UKismetSystemLibrary::DrawDebugArrow(this, GetActorLocation(), GetActorLocation() + toHit * 60.0f, 5.0f, FColor::Orange, 5.0f);
 }
 
 void AEnemy::PlayOnHitMontage(const FName& SectionName)
@@ -177,27 +160,88 @@ void AEnemy::PlayOnHitMontage(const FName& SectionName)
 	TObjectPtr<UAnimInstance> AnimInstance = GetMesh()->GetAnimInstance();
 	if (AnimInstance && OnHitMontage)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Hello"));
 		AnimInstance->Montage_Play(OnHitMontage);
 		AnimInstance->Montage_JumpToSection(SectionName, OnHitMontage);
 	}
+}
+
+bool AEnemy::InTargetRange(TObjectPtr<AActor> Target, double Radius)
+{
+	if (Target == nullptr) return false;
+	const double DisToTarget = (Target->GetActorLocation() - this->GetActorLocation()).Size();
+	DRAW_DEBUG_SPHERE_SINGLEFRAME(GetActorLocation());
+	DRAW_DEBUG_SPHERE_SINGLEFRAME(Target->GetActorLocation());
+	return DisToTarget <= Radius;
+}
+
+void AEnemy::MoveToTarget(TObjectPtr<AActor> Target)
+{
+	if (EnemyController == nullptr || Target == nullptr) return;
+
+	//if (Target == nullptr)
+	//{
+	//	const int32 randPatrolTarget = FMath::RandRange(0, PatrolTargets.Num() - 1);
+	//	TObjectPtr<AActor> newTarget = PatrolTargets[randPatrolTarget];
+	//	Target = newTarget;
+	//}
+
+	FAIMoveRequest MoveRequest;
+	MoveRequest.SetGoalActor(Target);
+	MoveRequest.SetAcceptanceRadius(15.0f);
+	EnemyController->MoveTo(MoveRequest);
+}
+
+TObjectPtr<AActor> AEnemy::ChoosePatrolTarget()
+{
+	TArray<TObjectPtr<AActor>> ValidTargets;
+	for (TObjectPtr<AActor>Target : PatrolTargets)
+	{
+		if (Target != CurrentPatrolTarget)
+			ValidTargets.AddUnique(Target);
+	}
+
+	const int32 NumPatrolTargets = ValidTargets.Num();
+	if (NumPatrolTargets > 0)
+	{
+		const int32 randPatrolTarget = FMath::RandRange(0, NumPatrolTargets - 1);
+		return ValidTargets[randPatrolTarget];
+	}
+	return nullptr;
+}
+
+void AEnemy::PatrolTimerFinished()
+{
+	MoveToTarget(CurrentPatrolTarget);
 }
 
 void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (Target)
+	CheckCombatTarget();
+	CheckPatrolTarget();
+}
+
+
+void AEnemy::CheckCombatTarget()
+{
+	if (!InTargetRange(CombatTarget, FollowRadius))
 	{
-		const double DisToTarget = (Target->GetActorLocation() - this->GetActorLocation()).Size();
-		if (DisToTarget > FollowRadius)
+		CombatTarget = nullptr;
+		if (HealthBar)
 		{
-			Target = nullptr;
-			if (HealthBar)
-			{
-				HealthBar->SetVisibility(false);
-			}
+			HealthBar->SetVisibility(false);
 		}
+	}
+}
+ 
+void AEnemy::CheckPatrolTarget()
+{
+	if (InTargetRange(CurrentPatrolTarget, PatrolRadius))
+	{
+		CurrentPatrolTarget = ChoosePatrolTarget();
+		const float surveyTime = FMath::RandRange(WaitTimeMin, WaitTimeMax);
+		GetWorldTimerManager().SetTimer(PatrolTimer, this, &AEnemy::PatrolTimerFinished, surveyTime);
 	}
 }
 
@@ -214,7 +258,7 @@ float AEnemy::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AC
 		Attributes->ReceiveDamage(DamageAmount);
 		HealthBar->SetHealthPercent(Attributes->GetHealthPercent());
 	}
-	Target = EventInstigator->GetPawn();
+	CombatTarget = EventInstigator->GetPawn();
 	return DamageAmount;
 }
 

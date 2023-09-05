@@ -24,6 +24,7 @@ public:
 	AEnemy();
 
 	virtual void Tick(float DeltaTime) override;
+	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInistigator, AActor* DamageCauser) override;
 protected:
@@ -36,6 +37,12 @@ protected:
 	virtual void GetHit_Implementation(const FVector& ImpactPoint) override;
 	virtual void DirectionalHitReact(const FVector& ImpactPoint);
 	void PlayOnHitMontage(const FName& SectionName);
+
+	void CheckCombatTarget();
+	void CheckPatrolTarget();
+	bool InTargetRange(TObjectPtr<AActor> Target, double Radius);
+	void MoveToTarget(TObjectPtr<AActor> Target);
+	TObjectPtr<AActor> ChoosePatrolTarget();
 
 private:
 	//--- Components ---//
@@ -58,16 +65,26 @@ private:
 
 	//--- Combat Variables ---//
 	UPROPERTY()
-		TObjectPtr<AActor> Target;
+		TObjectPtr<AActor> CombatTarget;
 	UPROPERTY(EditAnywhere)
 		double FollowRadius = 500.0f;
+	UPROPERTY(EditAnywhere)
+		double PatrolRadius = 200.0f;
 
 	//--- Navigation ---//
 	UPROPERTY(EditInstanceOnly, Category = "AI Navigation")
 	TObjectPtr<AActor> CurrentPatrolTarget;
 
 	UPROPERTY(EditInstanceOnly, Category = "AI Navigation")
-		TArray<TObjectPtr<AActor>> PartrolTargets;
+		TArray<TObjectPtr<AActor>> PatrolTargets;
+
+	FTimerHandle PatrolTimer;
+	void PatrolTimerFinished();
+
+	UPROPERTY(EditAnywhere)
+	float WaitTimeMin = 5.0f;
+	UPROPERTY(EditAnywhere)
+	float WaitTimeMax = 10.0f;
 
 	UPROPERTY()
 	TObjectPtr<AAIController> EnemyController;

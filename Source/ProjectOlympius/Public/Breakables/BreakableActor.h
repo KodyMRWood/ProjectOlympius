@@ -28,6 +28,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TObjectPtr<class UCapsuleComponent> CollisionComponent;
 
+
 private:	
 
 	
