@@ -60,6 +60,8 @@ void AOlympiusCharacter::BeginPlay()
 			Subsystem->AddMappingContext(InputContext, 0);
 		}
 	}
+
+	Tags.Add(FName("Player"));
 }
 
 void AOlympiusCharacter::Move(const FInputActionValue& value)

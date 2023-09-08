@@ -1,14 +1,15 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Perception/PawnSensingComponent.h"
 #include "Components/AttributeComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "ProjectOlympius/DebugMacros.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "HUD/HealthBarComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "AIController.h"
 #include "Enemies/Enemy.h"
 
+#include "ProjectOlympius/DebugMacros.h"
 
 AEnemy::AEnemy()
 {
@@ -28,6 +29,10 @@ AEnemy::AEnemy()
 	bUseControllerRotationYaw = false;
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
+
+	PawnSensor = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("Pawn Sensor Component"));
+	PawnSensor->SightRadius = 4000.0f;
+	PawnSensor->SetPeripheralVisionAngle(45.0f);
 }
 
 
@@ -47,6 +52,11 @@ void AEnemy::BeginPlay()
 		CurrentPatrolTarget = ChoosePatrolTarget();
 	}
 	MoveToTarget(CurrentPatrolTarget);
+
+	if (PawnSensor)
+	{
+		PawnSensor->OnSeePawn.AddDynamic(this, &AEnemy::PawnSeen);
+	}
 }
 
 void AEnemy::OnDeath()
@@ -209,6 +219,19 @@ TObjectPtr<AActor> AEnemy::ChoosePatrolTarget()
 	return nullptr;
 }
 
+void AEnemy::PawnSeen(APawn* SeenPawn)
+{
+	if (EnemyState == EEnemyState::EES_Chasing) return;
+	if (SeenPawn->ActorHasTag(FName("Player")))
+	{
+		EnemyState = EEnemyState::EES_Chasing;
+		GetWorldTimerManager().ClearTimer(PatrolTimer);
+		GetCharacterMovement()->MaxWalkSpeed = 300.0f;
+		CombatTarget = SeenPawn;
+		MoveToTarget(CombatTarget);
+	}
+}
+
 void AEnemy::PatrolTimerFinished()
 {
 	MoveToTarget(CurrentPatrolTarget);
@@ -218,8 +241,14 @@ void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	CheckCombatTarget();
-	CheckPatrolTarget();
+	if (EnemyState > EEnemyState::EES_Patrolling)
+	{
+		CheckCombatTarget();
+	}
+	else
+	{
+		CheckPatrolTarget();
+	}
 }
 
 
@@ -232,6 +261,9 @@ void AEnemy::CheckCombatTarget()
 		{
 			HealthBar->SetVisibility(false);
 		}
+		EnemyState = EEnemyState::EES_Patrolling;
+		GetCharacterMovement()->MaxWalkSpeed = 125.0f;
+		MoveToTarget(CurrentPatrolTarget);
 	}
 }
  

@@ -14,6 +14,7 @@ class UAnimeMontage;
 class AAIController;
 class UAttributeComponent;
 class UHealthBarComponent;
+class UPawnSensingComponent;
 
 UCLASS()
 class PROJECTOLYMPIUS_API AEnemy : public ACharacter, public IHitInterface
@@ -44,12 +45,17 @@ protected:
 	void MoveToTarget(TObjectPtr<AActor> Target);
 	TObjectPtr<AActor> ChoosePatrolTarget();
 
+	UFUNCTION()
+		void PawnSeen(APawn* SeenPawn);
+
 private:
 	//--- Components ---//
 	UPROPERTY(VisibleAnywhere)
 		TObjectPtr<UAttributeComponent> Attributes;
 	UPROPERTY(VisibleAnywhere)
 		TObjectPtr<UHealthBarComponent> HealthBar;
+	UPROPERTY(VisibleAnywhere)
+		TObjectPtr<UPawnSensingComponent> PawnSensor;
 
 	//--- Animation Montages ---//
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
@@ -85,6 +91,8 @@ private:
 	float WaitTimeMin = 5.0f;
 	UPROPERTY(EditAnywhere)
 	float WaitTimeMax = 10.0f;
+
+	EEnemyState EnemyState = EEnemyState::EES_Patrolling;
 
 	UPROPERTY()
 	TObjectPtr<AAIController> EnemyController;
