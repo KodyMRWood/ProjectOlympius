@@ -5,9 +5,9 @@ Description: Functionalty for the main character
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BaseCharacter.h"
 #include "CharacterTypes.h"
 #include "InputActionValue.h"
-#include "GameFramework/Character.h"
 #include "OlympiusCharacter.generated.h"
 
 //Forward Declarations
@@ -18,11 +18,9 @@ class UCameraComponent;
 class UGroomComponent;
 class UAnimMontage;
 class AItem;
-class AWeapon;
-
 
 UCLASS()
-class PROJECTOLYMPIUS_API AOlympiusCharacter : public ACharacter
+class PROJECTOLYMPIUS_API AOlympiusCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 
@@ -31,8 +29,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UFUNCTION(BlueprintCallable)
-	void ToggleWeaponCollision(ECollisionEnabled::Type CollisionEnabled);
+	
 
 protected:
 	virtual void BeginPlay() override;
@@ -55,16 +52,17 @@ protected:
 	void Move(const FInputActionValue& value);
 	void Look(const FInputActionValue& value);
 	virtual void Jump() override;
-	void Attack();
+	virtual void Attack() override;
 	void Dodge();
 	void EPressed();
 
 	//--- Montage Functions ---//
-	void PlayAttackMontage();
+	virtual void PlayAttackMontage() override;
 	void PlayEquipMontage(const FName &SectionName);
-	UFUNCTION(BlueprintCallable)
-	void AttackEnd();
-	bool CanAttack();
+
+	
+	virtual void AttackEnd() override;
+	virtual bool CanAttack() override;
 	bool CanUnequip();
 	bool CanEquip();
 	UFUNCTION(BlueprintCallable)
@@ -97,14 +95,8 @@ private:
 
 	//--- Animation Montages ---//
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
-	TObjectPtr<UAnimMontage> AttackMontage;
-
-	UPROPERTY(EditDefaultsOnly, Category = Montages)
 	TObjectPtr<UAnimMontage> EquipMontage;
 
-	//--- Equipment ---//
-	UPROPERTY(VisibleAnywhere, Category = Weapon)
-	TObjectPtr<AWeapon> EquippedWeapon;
 
 public:
 	FORCEINLINE void SetOverlappingItem(TObjectPtr<AItem> Item) { OverlappingItem = Item; }

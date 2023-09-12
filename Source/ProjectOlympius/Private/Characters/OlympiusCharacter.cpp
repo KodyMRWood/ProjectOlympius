@@ -14,6 +14,7 @@ Description: CPP for the main character
 #include "Items/Item.h"
 #include "Items/Weapons/Weapon.h"
 #include "Animation/AnimMontage.h"
+#include "Components/AttributeComponent.h"
 
 
 #include "Characters/OlympiusCharacter.h"
@@ -225,14 +226,5 @@ void AOlympiusCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		EnhancedInputComponent->BindAction(DodgeAction, ETriggerEvent::Triggered, this, &AOlympiusCharacter::Dodge);
 		EnhancedInputComponent->BindAction(EPressedAction, ETriggerEvent::Triggered, this, &AOlympiusCharacter::EPressed);
 	}
-}
-
-void AOlympiusCharacter::ToggleWeaponCollision(ECollisionEnabled::Type CollisionEnabled)
-{
-	if (EquippedWeapon && EquippedWeapon->GetWeaponBox())
-	{
-		EquippedWeapon->GetWeaponBox()->SetCollisionEnabled(CollisionEnabled);
-
-	}EquippedWeapon->IgnoreActors.Empty();
 }
 

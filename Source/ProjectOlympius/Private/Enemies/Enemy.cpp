@@ -1,13 +1,13 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Perception/PawnSensingComponent.h"
-#include "Components/AttributeComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "HUD/HealthBarComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "AIController.h"
 #include "Enemies/Enemy.h"
+#include "Components/AttributeComponent.h"
 
 #include "ProjectOlympius/DebugMacros.h"
 
@@ -20,7 +20,6 @@ AEnemy::AEnemy()
 	GetMesh()->SetGenerateOverlapEvents(true);
 	GetCapsuleComponent()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Camera, ECollisionResponse::ECR_Ignore);
 
-	Attributes = CreateDefaultSubobject<UAttributeComponent>(TEXT("Attribute Component"));
 
 	HealthBar = CreateDefaultSubobject<UHealthBarComponent>(TEXT("Health Bar"));
 	HealthBar->SetupAttachment(GetRootComponent());
@@ -132,48 +131,6 @@ void AEnemy::GetHit_Implementation(const FVector& ImpactPoint)
 
 }
 
-void AEnemy::DirectionalHitReact(const FVector& ImpactPoint)
-{
-	const FVector forward = GetActorForwardVector();
-	const FVector ImpactLowered(ImpactPoint.X, ImpactPoint.Y, GetActorLocation().Z);
-	const FVector toHit = (ImpactLowered - GetActorLocation()).GetSafeNormal();
-	const double CosTheta = FVector::DotProduct(forward, toHit);
-	double theta = FMath::Acos(CosTheta);
-	theta = FMath::RadiansToDegrees(theta);
-	const FVector crossProduct = FVector::CrossProduct(forward, toHit);
-
-	if (crossProduct.Z < 0)
-	{
-		theta *= -1.0f;
-	}
-
-	FName section("ReactBack");
-	if (theta >= -45.0f && theta < 45.0f)
-	{
-		section = FName("ReactFront");
-	}
-	else if (theta >= -135.0f && theta < -45.0f)
-	{
-		section = FName("ReactLeft");
-	}
-	else if (theta >= 45.0f && theta < 135.0f)
-	{
-		section = FName("ReactRight");
-	}
-
-	PlayOnHitMontage(FName(section));
-
-}
-
-void AEnemy::PlayOnHitMontage(const FName& SectionName)
-{
-	TObjectPtr<UAnimInstance> AnimInstance = GetMesh()->GetAnimInstance();
-	if (AnimInstance && OnHitMontage)
-	{
-		AnimInstance->Montage_Play(OnHitMontage);
-		AnimInstance->Montage_JumpToSection(SectionName, OnHitMontage);
-	}
-}
 
 bool AEnemy::InTargetRange(TObjectPtr<AActor> Target, double Radius)
 {

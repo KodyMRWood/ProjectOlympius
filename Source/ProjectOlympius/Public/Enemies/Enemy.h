@@ -5,19 +5,17 @@ Description: Parent class for all enemy types
 */
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
-#include "Interfaces/HitInterface.h"
+#include "Characters/BaseCharacter.h"
 #include "Characters/CharacterTypes.h"
 #include "Enemy.generated.h"
 
-class UAnimeMontage;
+
 class AAIController;
-class UAttributeComponent;
 class UHealthBarComponent;
 class UPawnSensingComponent;
 
 UCLASS()
-class PROJECTOLYMPIUS_API AEnemy : public ACharacter, public IHitInterface
+class PROJECTOLYMPIUS_API AEnemy : public ABaseCharacter
 {
 	GENERATED_BODY()
 public:
@@ -34,10 +32,9 @@ protected:
 		EDeathPose DeathPose = EDeathPose::EDP_Alive;
 
 	virtual void BeginPlay() override;
-	void OnDeath();
+	virtual void OnDeath() override;
 	virtual void GetHit_Implementation(const FVector& ImpactPoint) override;
-	virtual void DirectionalHitReact(const FVector& ImpactPoint);
-	void PlayOnHitMontage(const FName& SectionName);
+	
 
 	void CheckCombatTarget();
 	void CheckPatrolTarget();
@@ -51,23 +48,9 @@ protected:
 private:
 	//--- Components ---//
 	UPROPERTY(VisibleAnywhere)
-		TObjectPtr<UAttributeComponent> Attributes;
-	UPROPERTY(VisibleAnywhere)
 		TObjectPtr<UHealthBarComponent> HealthBar;
 	UPROPERTY(VisibleAnywhere)
 		TObjectPtr<UPawnSensingComponent> PawnSensor;
-
-	//--- Animation Montages ---//
-	UPROPERTY(EditDefaultsOnly, Category = Montages)
-		TObjectPtr<UAnimMontage> OnHitMontage;
-	UPROPERTY(EditDefaultsOnly, Category = Montages)
-		TObjectPtr<UAnimMontage> DeathMontage;
-
-	UPROPERTY(EditAnywhere, Category = Sounds)
-		TObjectPtr<USoundBase> HitSound;
-
-	UPROPERTY(EditAnywhere, Category = VisualEffects)
-		TObjectPtr<UParticleSystem> HitParticles;
 
 	//--- Combat Variables ---//
 	UPROPERTY()
