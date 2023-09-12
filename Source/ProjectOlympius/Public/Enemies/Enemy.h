@@ -13,6 +13,7 @@ Description: Parent class for all enemy types
 class AAIController;
 class UHealthBarComponent;
 class UPawnSensingComponent;
+class AWeapon;
 
 UCLASS()
 class PROJECTOLYMPIUS_API AEnemy : public ABaseCharacter
@@ -26,6 +27,8 @@ public:
 	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInistigator, AActor* DamageCauser) override;
+	virtual void Destroyed() override;
+
 protected:
 	//UPROPERTY(BlueprintReadOnly)
 	UPROPERTY(VisibleAnywhere)
@@ -51,6 +54,9 @@ private:
 		TObjectPtr<UHealthBarComponent> HealthBar;
 	UPROPERTY(VisibleAnywhere)
 		TObjectPtr<UPawnSensingComponent> PawnSensor;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AWeapon> WeaponClass;
 
 	//--- Combat Variables ---//
 	UPROPERTY()
