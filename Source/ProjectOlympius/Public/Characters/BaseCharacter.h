@@ -35,6 +35,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	bool IsAlive();
+	virtual void HandleDamage(float DamageAmount);
+
 	//--- Attack ---//
 	virtual void Attack();
 
@@ -48,14 +51,6 @@ protected:
 	//--- Equipment ---//
 	UPROPERTY(VisibleAnywhere, Category = Weapon)
 		TObjectPtr<AWeapon> EquippedWeapon;
-
-	//--- Sound FX ---//
-	UPROPERTY(EditAnywhere, Category = Sounds)
-		TObjectPtr<USoundBase> HitSound;
-
-	//--- Particle FX ---//
-	UPROPERTY(EditAnywhere, Category = VisualEffects)
-		TObjectPtr<UParticleSystem> HitParticles;
 
 	//--- Montage/Animation Variables ---//
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
@@ -72,11 +67,22 @@ protected:
 	void PlayOnHitMontage(const FName& SectionName);
 	virtual void DirectionalHitReact(const FVector& ImpactPoint);
 
-
 	UFUNCTION(BlueprintCallable)
 	virtual void AttackEnd();
 	virtual bool CanAttack();
 
-private:	
+	//--- Sound FX  ---//
+	void PlayHitSound(const FVector& ImpactPoint);
 
+	//--- Particle FX ---//
+	void PlayHitParticles(const FVector& ImpactPoint);
+
+private:	
+	//--- Sound FX ---//
+	UPROPERTY(EditAnywhere, Category = Sounds)
+		TObjectPtr<USoundBase> HitSound;
+
+	//--- Particle FX ---//
+	UPROPERTY(EditAnywhere, Category = VisualEffects)
+		TObjectPtr<UParticleSystem> HitParticles;
 };

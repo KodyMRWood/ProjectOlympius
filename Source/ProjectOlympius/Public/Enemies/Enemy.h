@@ -24,20 +24,22 @@ public:
 	AEnemy();
 
 	virtual void Tick(float DeltaTime) override;
-	
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInistigator, AActor* DamageCauser) override;
 	virtual void Destroyed() override;
 
 protected:
-	//UPROPERTY(BlueprintReadOnly)
+
 	UPROPERTY(VisibleAnywhere)
-		EDeathPose DeathPose = EDeathPose::EDP_Alive;
+		EDeathPose DeathPose;
+
+	UPROPERTY(BlueprintReadOnly)
+		EEnemyState EnemyState = EEnemyState::EES_Patrolling;
 
 	virtual void BeginPlay() override;
 	virtual void OnDeath() override;
+	virtual void HandleDamage(float DamageAmount) override;
 	virtual void GetHit_Implementation(const FVector& ImpactPoint) override;
-	
 
 	void CheckCombatTarget();
 	void CheckPatrolTarget();
@@ -48,6 +50,10 @@ protected:
 	UFUNCTION()
 		void PawnSeen(APawn* SeenPawn);
 
+	virtual bool CanAttack() override;
+	virtual void Attack() override;
+	virtual void PlayAttackMontage() override;
+
 private:
 	//--- Components ---//
 	UPROPERTY(VisibleAnywhere)
@@ -56,7 +62,7 @@ private:
 		TObjectPtr<UPawnSensingComponent> PawnSensor;
 
 	UPROPERTY(EditAnywhere)
-	TSubclassOf<AWeapon> WeaponClass;
+		TSubclassOf<AWeapon> WeaponClass;
 
 	//--- Combat Variables ---//
 	UPROPERTY()
@@ -70,7 +76,7 @@ private:
 
 	//--- Navigation ---//
 	UPROPERTY(EditInstanceOnly, Category = "AI Navigation")
-	TObjectPtr<AActor> CurrentPatrolTarget;
+		TObjectPtr<AActor> CurrentPatrolTarget;
 
 	UPROPERTY(EditInstanceOnly, Category = "AI Navigation")
 		TArray<TObjectPtr<AActor>> PatrolTargets;
@@ -79,12 +85,42 @@ private:
 	void PatrolTimerFinished();
 
 	UPROPERTY(EditAnywhere)
-	float WaitTimeMin = 5.0f;
+		float WaitTimeMin = 5.0f;
 	UPROPERTY(EditAnywhere)
-	float WaitTimeMax = 10.0f;
+		float WaitTimeMax = 10.0f;
 
-	EEnemyState EnemyState = EEnemyState::EES_Patrolling;
+	//--- AI Behaviour ---//
+	void ToggleHealthBarVisibility(bool isVisible);
+	void LoseInterest();
+	void StartPartrolling();
+	void StartChasing(); 
+	bool IsOutsideCombatRadius();
+	bool IsOutsideAttackRadius();
+	bool IsInsideAttackRadius();
+	bool IsPatrolling();
+	bool IsChasing();
+	bool IsAttacking();
+	bool IsEngaged();
+	bool IsDead();
+	void ClearPatrolTimer();
+
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+		float PatrollingSpeed = 125.0f;
+	UPROPERTY(EditAnywhere)
+		float ChasingSpeed = 300.0f;
+
+	//---Combat Behavious ---//
+
+	void StartAttackTimer();
+	void ClearAttackTimer();
+	FTimerHandle AttackTimer;
+
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	float AttackMin = 0.5f;
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	float AttackMax = 1.0f;
 
 	UPROPERTY()
-	TObjectPtr<AAIController> EnemyController;
+		TObjectPtr<AAIController> EnemyController;
 };
