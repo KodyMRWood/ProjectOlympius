@@ -30,8 +30,11 @@ public:
 
 protected:
 
-	UPROPERTY(VisibleAnywhere)
-		EDeathPose DeathPose;
+	UPROPERTY(EditAnywhere, Category = Combat)
+		float DeathTimeSpan = 5.0f;
+
+	UPROPERTY(BlueprintReadOnly)
+		TEnumAsByte<EDeathPose> DeathPose;
 
 	UPROPERTY(BlueprintReadOnly)
 		EEnemyState EnemyState = EEnemyState::EES_Patrolling;
@@ -52,7 +55,8 @@ protected:
 
 	virtual bool CanAttack() override;
 	virtual void Attack() override;
-	virtual void PlayAttackMontage() override;
+
+	virtual int32 PlayDeathMontage() override;
 
 private:
 	//--- Components ---//

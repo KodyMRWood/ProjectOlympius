@@ -57,7 +57,6 @@ protected:
 	void EPressed();
 
 	//--- Montage Functions ---//
-	virtual void PlayAttackMontage() override;
 	void PlayEquipMontage(const FName &SectionName);
 
 	

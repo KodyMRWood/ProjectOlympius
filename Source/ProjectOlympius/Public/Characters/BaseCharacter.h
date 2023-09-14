@@ -37,6 +37,7 @@ protected:
 
 	bool IsAlive();
 	virtual void HandleDamage(float DamageAmount);
+	void DisableCapsule();
 
 	//--- Attack ---//
 	virtual void Attack();
@@ -62,10 +63,18 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 		TObjectPtr<UAnimMontage> DeathMontage;
 
+	UPROPERTY(EditAnywhere, Category = Combat)
+		TArray<FName> AttackMontageSections;
+	UPROPERTY(EditAnywhere, Category = Combat)
+		TArray<FName> DeathMontageSections;
+
 	//--- Montage/Animation Functions ---//
-	virtual void PlayAttackMontage();
 	void PlayOnHitMontage(const FName& SectionName);
 	virtual void DirectionalHitReact(const FVector& ImpactPoint);
+	void PlayMontageSection(TObjectPtr<UAnimMontage> AnimMontage,const FName& SectionName);
+	virtual int32 PlayAttackMontage();
+	virtual int32 PlayDeathMontage();
+	int32 PlayRandomMontageSection(TObjectPtr<UAnimMontage> AnimMontage, const TArray<FName>& SectionNames);
 
 	UFUNCTION(BlueprintCallable)
 	virtual void AttackEnd();
