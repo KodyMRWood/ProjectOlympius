@@ -188,6 +188,7 @@ bool AEnemy::CanAttack()
 	bool bCanAttack =
 		IsInsideAttackRadius() &&
 		!IsAttacking() &&
+		!IsEngaged() &&
 		!IsDead();
 	return bCanAttack;
 }
@@ -207,6 +208,13 @@ void AEnemy::Attack()
 {
 	Super::Attack();
 	PlayAttackMontage();
+}
+
+void AEnemy::AttackEnd()
+{
+	Super::AttackEnd();
+	EnemyState = EEnemyState::EES_NoState;
+	CheckCombatTarget();
 }
 
 void AEnemy::PatrolTimerFinished()
@@ -318,7 +326,7 @@ void AEnemy::CheckCombatTarget()
 			StartChasing();
 		}
 	}
-	else if (IsInsideAttackRadius() && !IsAttacking())
+	else if (CanAttack())
 	{
 		StartAttackTimer();
 	}

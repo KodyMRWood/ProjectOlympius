@@ -36,7 +36,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 		TEnumAsByte<EDeathPose> DeathPose;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite)
 		EEnemyState EnemyState = EEnemyState::EES_Patrolling;
 
 	virtual void BeginPlay() override;
@@ -55,6 +55,7 @@ protected:
 
 	virtual bool CanAttack() override;
 	virtual void Attack() override;
+	virtual void AttackEnd() override;
 
 	virtual int32 PlayDeathMontage() override;
 
