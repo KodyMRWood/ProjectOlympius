@@ -11,13 +11,6 @@ Description: Base parent class for all character like entities in the game (i.e.
 
 
 //Forward Declarations
-//class UInputAction;
-//class UInputMappingContext;
-//class USpringArmComponent;
-//class UCameraComponent;
-//class UGroomComponent;
-//class UAnimMontage;
-//class AItem;
 class UAnimeMontage;
 class AWeapon;
 class UAttributeComponent;
@@ -27,24 +20,44 @@ class PROJECTOLYMPIUS_API ABaseCharacter : public ACharacter, public IHitInterfa
 {
 	GENERATED_BODY()
 public:
+	//--------- Public Functions ---------//
 	ABaseCharacter();
+	//<AActor>
 	virtual void Tick(float DeltaTime) override;
 
-	UFUNCTION(BlueprintCallable)
-		void ToggleWeaponCollision(ECollisionEnabled::Type CollisionEnabled);
+	//--------- Public Variables ---------//
+
 protected:
+	//--------- Protected Functions ---------//
+	//<AActor>
 	virtual void BeginPlay() override;
 
-	bool IsAlive();
-	virtual void HandleDamage(float DamageAmount);
-	void DisableCapsule();
-
-	//--- Attack ---//
+	//--- Combat ---//
 	virtual void Attack();
-
-	//--- Death ---//
+	virtual bool CanAttack();
+	UFUNCTION(BlueprintCallable)
+	virtual void AttackEnd();
+	virtual void HandleDamage(float DamageAmount);
+	bool IsAlive();
 	virtual void OnDeath();
 
+	void DisableCapsule();
+	UFUNCTION(BlueprintCallable)
+	void ToggleWeaponCollision(ECollisionEnabled::Type CollisionEnabled);
+
+	//--- Montage/Animation ---//
+	virtual int32 PlayAttackMontage();
+	void PlayOnHitMontage(const FName& SectionName);
+	virtual void DirectionalHitReact(const FVector& ImpactPoint);
+	virtual int32 PlayDeathMontage();
+
+	//--- Sound FX  ---//
+	void PlayHitSound(const FVector& ImpactPoint);
+
+	//--- Particle FX ---//
+	void PlayHitParticles(const FVector& ImpactPoint);
+
+	//--------- Protected Variables ---------//
 	//--- Components ---//
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 		TObjectPtr<UAttributeComponent> Attributes;
@@ -53,7 +66,15 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = Weapon)
 		TObjectPtr<AWeapon> EquippedWeapon;
 
-	//--- Montage/Animation Variables ---//
+private:
+
+	//--------- Private Functions ---------//
+	//--- Montage/Animation ---//
+	void PlayMontageSection(TObjectPtr<UAnimMontage> AnimMontage, const FName& SectionName);
+	int32 PlayRandomMontageSection(TObjectPtr<UAnimMontage> AnimMontage, const TArray<FName>& SectionNames);
+
+	//--------- Private Variables ---------//
+	//--- Montage/Animation ---//
 	UPROPERTY(EditDefaultsOnly, Category = Montages)
 		TObjectPtr<UAnimMontage> AttackMontage;
 
@@ -68,25 +89,6 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Combat)
 		TArray<FName> DeathMontageSections;
 
-	//--- Montage/Animation Functions ---//
-	void PlayOnHitMontage(const FName& SectionName);
-	virtual void DirectionalHitReact(const FVector& ImpactPoint);
-	void PlayMontageSection(TObjectPtr<UAnimMontage> AnimMontage,const FName& SectionName);
-	virtual int32 PlayAttackMontage();
-	virtual int32 PlayDeathMontage();
-	int32 PlayRandomMontageSection(TObjectPtr<UAnimMontage> AnimMontage, const TArray<FName>& SectionNames);
-
-	UFUNCTION(BlueprintCallable)
-	virtual void AttackEnd();
-	virtual bool CanAttack();
-
-	//--- Sound FX  ---//
-	void PlayHitSound(const FVector& ImpactPoint);
-
-	//--- Particle FX ---//
-	void PlayHitParticles(const FVector& ImpactPoint);
-
-private:	
 	//--- Sound FX ---//
 	UPROPERTY(EditAnywhere, Category = Sounds)
 		TObjectPtr<USoundBase> HitSound;

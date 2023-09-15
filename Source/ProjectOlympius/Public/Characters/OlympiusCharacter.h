@@ -25,15 +25,50 @@ class PROJECTOLYMPIUS_API AOlympiusCharacter : public ABaseCharacter
 	GENERATED_BODY()
 
 public:
+	//--------- Public Functions ---------//
 	AOlympiusCharacter();
+
+	//<AActor>
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	
+	FORCEINLINE void SetOverlappingItem(TObjectPtr<AItem> Item) { OverlappingItem = Item; }
+	FORCEINLINE ECharacterState GetCharacterState()  const { return CharacterState; }
+
+	//--------- Public Variables---------//
 
 protected:
+	//--------- Protected Functions ---------//
+	//<AActor>
 	virtual void BeginPlay() override;
 
+	//--- Inputs ---//
+	void Move(const FInputActionValue& value);
+	void Look(const FInputActionValue& value);
+	virtual void Jump() override;
+	virtual void Attack() override;
+	void Dodge();
+	void EPressed();
+
+	//--- Combat ---//
+	virtual bool CanAttack() override;
+	virtual void AttackEnd() override;
+	bool CanEquip();
+	void PickUpWeapon(TObjectPtr<AWeapon> Weapon);
+	void Equip();
+	bool CanUnequip();
+	void Unequip();
+	UFUNCTION(BlueprintCallable)
+		void AttachWeaponToBack();
+	UFUNCTION(BlueprintCallable)
+		void AttachWeaponToHand();
+	UFUNCTION(BlueprintCallable)
+		void FinishEquipping();
+
+	//--- Montage ---//
+	void PlayEquipMontage(const FName& SectionName);
+
+	//--------- Protected Variables ---------//
 	//--- Inputs ---//
 	UPROPERTY(EditAnywhere, Category = Input)
 	TObjectPtr<UInputMappingContext> InputContext;
@@ -49,29 +84,13 @@ protected:
 	TObjectPtr<UInputAction> DodgeAction;
 	UPROPERTY(EditAnywhere, Category = Input)
 	TObjectPtr<UInputAction> EPressedAction;
-	void Move(const FInputActionValue& value);
-	void Look(const FInputActionValue& value);
-	virtual void Jump() override;
-	virtual void Attack() override;
-	void Dodge();
-	void EPressed();
-
-	//--- Montage Functions ---//
-	void PlayEquipMontage(const FName &SectionName);
-
-	
-	virtual void AttackEnd() override;
-	virtual bool CanAttack() override;
-	bool CanUnequip();
-	bool CanEquip();
-	UFUNCTION(BlueprintCallable)
-	void UnequipItem();
-	UFUNCTION(BlueprintCallable)
-	void EquipItem();
-	UFUNCTION(BlueprintCallable)
-	void FinishEquipping();
 
 private:
+	//--------- Private Functions ---------//
+
+	//--------- Private Variables ---------//
+
+	//--- Components ---//
 	//Spring Arm and Camera
 	UPROPERTY(VisibleAnywhere)
 		TObjectPtr<USpringArmComponent> CameraArm;
@@ -84,10 +103,11 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = Hair)
 		TObjectPtr<UGroomComponent> Eyebrows;
 
+	//--- Interactions ---//
 	UPROPERTY(VisibleInstanceOnly)
 	TObjectPtr<AItem> OverlappingItem;
 
-	//--- Character States (Animations) ---//
+	//--- Character States---//
 	ECharacterState CharacterState = ECharacterState::ECS_Unequipped;
 	UPROPERTY(BlueprintReadWrite, meta=(AllowPrivateAccess = "true"))
 	EActionState ActionState = EActionState::EAS_Unoccupied;
@@ -98,6 +118,5 @@ private:
 
 
 public:
-	FORCEINLINE void SetOverlappingItem(TObjectPtr<AItem> Item) { OverlappingItem = Item; }
-	FORCEINLINE ECharacterState GetCharacterState()  const { return CharacterState; }
+
 };
