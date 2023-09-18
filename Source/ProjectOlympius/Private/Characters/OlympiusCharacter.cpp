@@ -14,6 +14,7 @@ Description: CPP for the main character
 #include "Items/Weapons/Weapon.h"
 #include "Animation/AnimMontage.h"
 #include "Components/AttributeComponent.h"
+#include "Components/StaticMeshComponent.h"
 
 
 #include "Characters/OlympiusCharacter.h"
@@ -29,6 +30,12 @@ AOlympiusCharacter::AOlympiusCharacter()
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 400.0f, 0.0f);
+
+	GetMesh()->SetCollisionObjectType(ECollisionChannel::ECC_WorldDynamic);
+	GetMesh()->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_Visibility, ECollisionResponse::ECR_Block);
+	GetMesh()->SetCollisionResponseToChannel(ECollisionChannel::ECC_WorldDynamic, ECollisionResponse::ECR_Overlap);
+	GetMesh()->SetGenerateOverlapEvents(true);
 
 	CameraArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraArm"));
 	CameraArm->SetupAttachment(GetRootComponent());
@@ -62,6 +69,12 @@ void AOlympiusCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		EnhancedInputComponent->BindAction(DodgeAction, ETriggerEvent::Triggered, this, &AOlympiusCharacter::Dodge);
 		EnhancedInputComponent->BindAction(EPressedAction, ETriggerEvent::Triggered, this, &AOlympiusCharacter::EPressed);
 	}
+}
+
+void AOlympiusCharacter::GetHit_Implementation(const FVector& ImpactPoint)
+{
+	PlayHitSound(ImpactPoint);
+	PlayHitParticles(ImpactPoint);
 }
 
 void AOlympiusCharacter::BeginPlay()

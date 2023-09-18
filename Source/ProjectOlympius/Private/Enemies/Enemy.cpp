@@ -82,6 +82,7 @@ void AEnemy::BeginPlay()
 		PawnSensor->OnSeePawn.AddDynamic(this, &AEnemy::PawnSeen);
 	}
 	InitEnemy();
+	Tags.Add("Enemy");
 }
 
 bool AEnemy::CanAttack()

@@ -75,13 +75,13 @@ private:
 
 	//--------- Private Variables ---------//
 	//--- Montage/Animation ---//
-	UPROPERTY(EditDefaultsOnly, Category = Montages)
+	UPROPERTY(EditDefaultsOnly, Category = Combat)
 		TObjectPtr<UAnimMontage> AttackMontage;
 
-	UPROPERTY(EditDefaultsOnly, Category = Montages)
+	UPROPERTY(EditDefaultsOnly, Category = Combat)
 		TObjectPtr<UAnimMontage> OnHitMontage;
 
-	UPROPERTY(EditDefaultsOnly, Category = Montages)
+	UPROPERTY(EditDefaultsOnly, Category = Combat)
 		TObjectPtr<UAnimMontage> DeathMontage;
 
 	UPROPERTY(EditAnywhere, Category = Combat)
@@ -90,10 +90,10 @@ private:
 		TArray<FName> DeathMontageSections;
 
 	//--- Sound FX ---//
-	UPROPERTY(EditAnywhere, Category = Sounds)
+	UPROPERTY(EditAnywhere, Category = Combat)
 		TObjectPtr<USoundBase> HitSound;
 
 	//--- Particle FX ---//
-	UPROPERTY(EditAnywhere, Category = VisualEffects)
+	UPROPERTY(EditAnywhere, Category = Combat)
 		TObjectPtr<UParticleSystem> HitParticles;
 };
