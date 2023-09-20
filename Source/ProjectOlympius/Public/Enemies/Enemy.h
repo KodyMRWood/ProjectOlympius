@@ -54,6 +54,8 @@ protected:
 		TEnumAsByte<EDeathPose> DeathPose;
 	UPROPERTY(BlueprintReadWrite)
 		EEnemyState EnemyState = EEnemyState::EES_Patrolling;
+	UPROPERTY(BlueprintReadWrite, Category = Combat)
+		TObjectPtr<AActor> CombatTarget;
 
 private:
 
@@ -107,8 +109,8 @@ private:
 		TSubclassOf<AWeapon> WeaponClass;
 
 	//--- AI Behaviour ---//
-	UPROPERTY()
-		TObjectPtr<AActor> CombatTarget;
+	//UPROPERTY()
+	//	TObjectPtr<AActor> CombatTarget;
 
 	UPROPERTY(EditAnywhere)
 		float ChasingSpeed = 300.0f;

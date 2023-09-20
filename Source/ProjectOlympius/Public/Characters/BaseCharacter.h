@@ -48,6 +48,7 @@ protected:
 
 	//--- Montage/Animation ---//
 	virtual int32 PlayAttackMontage();
+	void StopAttackMontage();
 	void PlayOnHitMontage(const FName& SectionName);
 	virtual void DirectionalHitReact(const FVector& ImpactPoint);
 	virtual int32 PlayDeathMontage();
