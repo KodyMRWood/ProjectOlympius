@@ -58,20 +58,11 @@ void AEnemy::Destroyed()
 	}
 }
 
-void AEnemy::GetHit_Implementation(const FVector& ImpactPoint)
+void AEnemy::GetHit_Implementation(const FVector& ImpactPoint, const AActor* Hitter)
 {
-	ToggleHealthBarVisibility(true);
-
-	if (IsAlive())
-	{
-		DirectionalHitReact(ImpactPoint);
-	}
-	else
-	{
-		OnDeath();
-	}
-	PlayHitSound(ImpactPoint);
-	PlayHitParticles(ImpactPoint);
+	Super::GetHit_Implementation(ImpactPoint, Hitter);
+	if(!IsDead()) ToggleHealthBarVisibility(true);
+	ClearPatrolTimer();
 }
 
 void AEnemy::BeginPlay()
@@ -126,6 +117,7 @@ void AEnemy::OnDeath()
 	PlayDeathMontage();
 	SetLifeSpan(DeathTimeSpan);
 	GetCharacterMovement()->bOrientRotationToMovement = false;
+	ToggleWeaponCollision(ECollisionEnabled::NoCollision);
 }
 
 int32 AEnemy::PlayDeathMontage()

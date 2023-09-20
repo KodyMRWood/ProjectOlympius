@@ -71,10 +71,11 @@ void AOlympiusCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	}
 }
 
-void AOlympiusCharacter::GetHit_Implementation(const FVector& ImpactPoint)
+void AOlympiusCharacter::GetHit_Implementation(const FVector& ImpactPoint, const AActor* Hitter)
 {
-	PlayHitSound(ImpactPoint);
-	PlayHitParticles(ImpactPoint);
+	Super::GetHit_Implementation(ImpactPoint,  Hitter);
+	ToggleWeaponCollision(ECollisionEnabled::NoCollision);
+	ActionState = EActionState::EAS_HitReaction;
 }
 
 void AOlympiusCharacter::BeginPlay()
@@ -213,6 +214,11 @@ void AOlympiusCharacter::AttachWeaponToBack()
 }
 
 void AOlympiusCharacter::FinishEquipping()
+{
+	ActionState = EActionState::EAS_Unoccupied;
+}
+
+void AOlympiusCharacter::HitReactEnd()
 {
 	ActionState = EActionState::EAS_Unoccupied;
 }

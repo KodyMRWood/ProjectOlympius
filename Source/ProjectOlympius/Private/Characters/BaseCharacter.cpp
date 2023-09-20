@@ -29,6 +29,20 @@ bool ABaseCharacter::CanAttack()
 	return false;
 }
 
+void ABaseCharacter::GetHit_Implementation(const FVector& ImpactPoint, const AActor* Hitter)
+{
+	if (IsAlive() && Hitter)
+	{
+		DirectionalHitReact(Hitter->GetActorLocation());
+	}
+	else
+	{
+		OnDeath();
+	}
+	PlayHitSound(ImpactPoint);
+	PlayHitParticles(ImpactPoint);
+}
+
 void ABaseCharacter::Attack()
 {
 }

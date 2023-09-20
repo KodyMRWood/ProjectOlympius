@@ -33,6 +33,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	//--- Combat ---//
+	virtual void GetHit_Implementation(const FVector& ImpactPoint, const AActor* Hitter) override;
 	virtual void Attack();
 	virtual bool CanAttack();
 	UFUNCTION(BlueprintCallable)
