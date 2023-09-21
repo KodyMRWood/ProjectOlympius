@@ -30,7 +30,10 @@ public:
 
 	//<AActor>
 	virtual void Tick(float DeltaTime) override;
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInistigator, AActor* DamageCauser) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+	//<IHitInterface>
 	virtual void GetHit_Implementation(const FVector& ImpactPoint, const AActor* Hitter) override;
 
 	FORCEINLINE void SetOverlappingItem(TObjectPtr<AItem> Item) { OverlappingItem = Item; }

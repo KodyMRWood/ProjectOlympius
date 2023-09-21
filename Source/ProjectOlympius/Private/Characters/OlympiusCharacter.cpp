@@ -56,6 +56,12 @@ void AOlympiusCharacter::Tick(float DeltaTime)
 {
 }
 
+float AOlympiusCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInistigator, AActor* DamageCauser)
+{
+	HandleDamage(DamageAmount);
+	return DamageAmount;
+}
+
 void AOlympiusCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
