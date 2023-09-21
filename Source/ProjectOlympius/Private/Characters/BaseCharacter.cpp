@@ -83,6 +83,28 @@ void ABaseCharacter::ToggleWeaponCollision(ECollisionEnabled::Type CollisionEnab
 	EquippedWeapon->IgnoreActors.Empty();
 }
 
+FVector ABaseCharacter::GetTranslationWarpTarget()
+{
+	if (CombatTarget == nullptr) return FVector();
+	
+	const FVector CombatTargetLocation = CombatTarget->GetActorLocation();
+	const FVector Location = GetActorLocation();
+
+	FVector TargetToSelf = (Location - CombatTargetLocation).GetSafeNormal();
+	TargetToSelf *= WarpTargetDistance;
+	
+	return CombatTargetLocation + TargetToSelf;
+}
+
+FVector ABaseCharacter::GetRotationWarpTarget()
+{
+	if (CombatTarget)
+	{
+		return CombatTarget->GetActorLocation();
+	}
+	return FVector();
+}
+
 int32 ABaseCharacter::PlayAttackMontage()
 {
 	return PlayRandomMontageSection(AttackMontage, AttackMontageSections);

@@ -54,8 +54,6 @@ protected:
 		TEnumAsByte<EDeathPose> DeathPose;
 	UPROPERTY(BlueprintReadWrite)
 		EEnemyState EnemyState = EEnemyState::EES_Patrolling;
-	UPROPERTY(BlueprintReadWrite, Category = Combat)
-		TObjectPtr<AActor> CombatTarget;
 
 private:
 

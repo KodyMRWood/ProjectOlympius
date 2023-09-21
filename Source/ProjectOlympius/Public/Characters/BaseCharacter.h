@@ -46,6 +46,12 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	void ToggleWeaponCollision(ECollisionEnabled::Type CollisionEnabled);
 
+	UFUNCTION(BlueprintCallable)
+	FVector GetTranslationWarpTarget();
+
+	UFUNCTION(BlueprintCallable)
+	FVector GetRotationWarpTarget();
+
 	//--- Montage/Animation ---//
 	virtual int32 PlayAttackMontage();
 	void StopAttackMontage();
@@ -67,6 +73,12 @@ protected:
 	//--- Equipment ---//
 	UPROPERTY(VisibleAnywhere, Category = Weapon)
 		TObjectPtr<AWeapon> EquippedWeapon;
+
+	//--- Combat ---//
+	UPROPERTY(BlueprintReadWrite, Category = Combat)
+		TObjectPtr<AActor> CombatTarget;
+	UPROPERTY(EditAnywhere, Category = Combat)
+	double WarpTargetDistance = 75.0f;
 
 private:
 
