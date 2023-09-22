@@ -61,6 +61,7 @@ void AOlympiusCharacter::Tick(float DeltaTime)
 float AOlympiusCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInistigator, AActor* DamageCauser)
 {
 	HandleDamage(DamageAmount);
+	SetHUDHealth();
 	return DamageAmount;
 }
 
@@ -119,7 +120,10 @@ void AOlympiusCharacter::Look(const FInputActionValue& value)
 
 void AOlympiusCharacter::Jump()
 {
-	Super::Jump();
+	if (IsUnoccupied())
+	{
+		Super::Jump();
+	}
 	//ActionState = EActionState::EAS_Jumping;
 }
 
@@ -264,5 +268,18 @@ void AOlympiusCharacter::InitInputSystem()
 			Subsystem->AddMappingContext(InputContext, 0);
 		}
 	}
+}
+
+void AOlympiusCharacter::SetHUDHealth()
+{
+	if (PlayerOverlay && Attributes)
+	{
+		PlayerOverlay->SetHealthBarPercent(Attributes->GetHealthPercent());
+	}
+}
+
+bool AOlympiusCharacter::IsUnoccupied()
+{
+	return ActionState == EActionState::EAS_Unoccupied;
 }
 

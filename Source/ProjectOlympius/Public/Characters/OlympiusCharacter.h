@@ -97,6 +97,8 @@ private:
 	//--------- Private Functions ---------//
 	void InitOverlay();
 	void InitInputSystem();
+	void SetHUDHealth();
+	bool IsUnoccupied();
 
 	//--------- Private Variables ---------//
 	//--- Controllers ---//
