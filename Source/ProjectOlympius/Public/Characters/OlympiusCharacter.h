@@ -18,6 +18,7 @@ class UCameraComponent;
 class UGroomComponent;
 class UAnimMontage;
 class AItem;
+class UPlayerOverlay;
 
 UCLASS()
 class PROJECTOLYMPIUS_API AOlympiusCharacter : public ABaseCharacter
@@ -94,8 +95,16 @@ protected:
 
 private:
 	//--------- Private Functions ---------//
+	void InitOverlay();
+	void InitInputSystem();
 
 	//--------- Private Variables ---------//
+	//--- Controllers ---//
+	TObjectPtr<APlayerController> PlayerController;
+
+	//--- HUD ---//
+	UPROPERTY();
+	TObjectPtr<UPlayerOverlay> PlayerOverlay;
 
 	//--- Components ---//
 	//Spring Arm and Camera

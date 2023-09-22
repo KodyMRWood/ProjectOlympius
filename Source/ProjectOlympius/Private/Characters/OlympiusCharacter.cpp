@@ -15,6 +15,8 @@ Description: CPP for the main character
 #include "Animation/AnimMontage.h"
 #include "Components/AttributeComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "HUD/PlayerHUD.h"
+#include "HUD/PlayerOverlay.h"
 
 
 #include "Characters/OlympiusCharacter.h"
@@ -46,7 +48,7 @@ AOlympiusCharacter::AOlympiusCharacter()
 	Hair = CreateDefaultSubobject<UGroomComponent>(TEXT("Hair"));
 	Hair->SetupAttachment(GetMesh());
 	Hair->AttachmentName = FString("Head");
-	
+
 	Eyebrows = CreateDefaultSubobject<UGroomComponent>(TEXT("Eyebrows"));
 	Eyebrows->SetupAttachment(GetMesh());
 	Eyebrows->AttachmentName = FString("Head");
@@ -79,7 +81,7 @@ void AOlympiusCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 void AOlympiusCharacter::GetHit_Implementation(const FVector& ImpactPoint, const AActor* Hitter)
 {
-	Super::GetHit_Implementation(ImpactPoint,  Hitter);
+	Super::GetHit_Implementation(ImpactPoint, Hitter);
 	ToggleWeaponCollision(ECollisionEnabled::NoCollision);
 	ActionState = EActionState::EAS_HitReaction;
 }
@@ -87,14 +89,9 @@ void AOlympiusCharacter::GetHit_Implementation(const FVector& ImpactPoint, const
 void AOlympiusCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if (TObjectPtr<APlayerController> PlayerController = Cast<APlayerController>(GetController()))
-	{
-		if (TObjectPtr<UEnhancedInputLocalPlayerSubsystem> Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
-		{
-			Subsystem->AddMappingContext(InputContext, 0);
-		}
-	}
+	PlayerController = Cast<APlayerController>(GetController());
+	InitOverlay();
+	InitInputSystem();
 
 	Tags.Add(FName("Player"));
 }
@@ -128,7 +125,7 @@ void AOlympiusCharacter::Jump()
 
 void AOlympiusCharacter::Attack()
 {
-	if(CanAttack())
+	if (CanAttack())
 	{
 		PlayAttackMontage();
 		ActionState = EActionState::EAS_Attacking;
@@ -147,7 +144,7 @@ void AOlympiusCharacter::EPressed()
 	{
 		PickUpWeapon(OverlappingWeapon);
 	}
-	else 
+	else
 	{
 		if (CanUnequip())
 		{
@@ -236,6 +233,36 @@ void AOlympiusCharacter::PlayEquipMontage(const FName& SectionName)
 	{
 		AnimInstance->Montage_Play(EquipMontage);
 		AnimInstance->Montage_JumpToSection(SectionName, EquipMontage);
+	}
+}
+
+void AOlympiusCharacter::InitOverlay()
+{
+	if (PlayerController)
+	{
+		APlayerHUD* PlayerHUD = Cast<APlayerHUD>(PlayerController->GetHUD());
+		if (PlayerHUD)
+		{
+			PlayerOverlay = PlayerHUD->GetPlayerOverlay();
+			if (PlayerOverlay && Attributes)
+			{
+				PlayerOverlay->SetHealthBarPercent(Attributes->GetHealthPercent());
+				PlayerOverlay->SetStaminaBarPercent(1.0f);
+				PlayerOverlay->SetGold(0);
+				PlayerOverlay->SetSouls(0);
+			}
+		}
+	}
+}
+
+void AOlympiusCharacter::InitInputSystem()
+{
+	if (PlayerController)
+	{
+		if (TObjectPtr<UEnhancedInputLocalPlayerSubsystem> Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			Subsystem->AddMappingContext(InputContext, 0);
+		}
 	}
 }
 

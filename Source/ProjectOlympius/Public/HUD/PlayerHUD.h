@@ -18,6 +18,7 @@ class PROJECTOLYMPIUS_API APlayerHUD : public AHUD
 	GENERATED_BODY()
 public:
 	//--------- Public Functions ---------//
+	FORCEINLINE TObjectPtr<UPlayerOverlay> GetPlayerOverlay() const { return PlayerOverlay; }
 
 	//--------- Public Variables ---------//
 
