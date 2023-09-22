@@ -8,11 +8,11 @@ Description: Functionalty for the Weapon actor, Child of Item
 #include "Items/Item.h"
 #include "Weapon.generated.h"
 
+//Forward Declarations
 class USoundBase;
 class UBoxComponent;
-/**
- * 
- */
+
+
 UCLASS()
 class PROJECTOLYMPIUS_API AWeapon : public AItem
 {
