@@ -39,6 +39,8 @@ public:
 
 	FORCEINLINE void SetOverlappingItem(TObjectPtr<AItem> Item) { OverlappingItem = Item; }
 	FORCEINLINE ECharacterState GetCharacterState()  const { return CharacterState; }
+	FORCEINLINE EActionState GetActionState() const { return ActionState; }
+
 
 	//--------- Public Variables---------//
 
@@ -71,6 +73,7 @@ protected:
 		void FinishEquipping();
 	UFUNCTION(BlueprintCallable)
 		void HitReactEnd();
+	virtual void OnDeath() override;
 
 
 	//--- Montage ---//

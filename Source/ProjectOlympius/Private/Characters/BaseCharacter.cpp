@@ -66,6 +66,7 @@ bool ABaseCharacter::IsAlive()
 
 void ABaseCharacter::OnDeath()
 {
+	PlayDeathMontage();
 }
 
 void ABaseCharacter::DisableCapsule()
@@ -78,9 +79,11 @@ void ABaseCharacter::ToggleWeaponCollision(ECollisionEnabled::Type CollisionEnab
 	if (EquippedWeapon && EquippedWeapon->GetWeaponBox())
 	{
 		EquippedWeapon->GetWeaponBox()->SetCollisionEnabled(CollisionEnabled);
-
 	}
-	EquippedWeapon->IgnoreActors.Empty();
+	else if(EquippedWeapon && !EquippedWeapon->GetWeaponBox())
+	{
+		EquippedWeapon->IgnoreActors.Empty();
+	}
 }
 
 FVector ABaseCharacter::GetTranslationWarpTarget()
@@ -162,7 +165,13 @@ void ABaseCharacter::DirectionalHitReact(const FVector& ImpactPoint)
 
 int32 ABaseCharacter::PlayDeathMontage()
 {
-	return PlayRandomMontageSection(DeathMontage, DeathMontageSections);
+	const int32 Selection = PlayRandomMontageSection(DeathMontage, DeathMontageSections);
+	TEnumAsByte<EDeathPose> Pose(Selection);
+	if (Pose < EDeathPose::EDP_MAX)
+	{
+		DeathPose = Pose;
+	}
+	return  Selection;
 }
 
 void ABaseCharacter::PlayHitSound(const FVector& ImpactPoint)

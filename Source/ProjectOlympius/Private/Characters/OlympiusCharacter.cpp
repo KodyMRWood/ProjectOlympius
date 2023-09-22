@@ -84,7 +84,10 @@ void AOlympiusCharacter::GetHit_Implementation(const FVector& ImpactPoint, const
 {
 	Super::GetHit_Implementation(ImpactPoint, Hitter);
 	ToggleWeaponCollision(ECollisionEnabled::NoCollision);
-	ActionState = EActionState::EAS_HitReaction;
+	if (Attributes && Attributes->GetHealthPercent() > 0.0f)
+	{	
+		ActionState = EActionState::EAS_HitReaction;
+	}
 }
 
 void AOlympiusCharacter::BeginPlay()
@@ -228,6 +231,12 @@ void AOlympiusCharacter::FinishEquipping()
 void AOlympiusCharacter::HitReactEnd()
 {
 	ActionState = EActionState::EAS_Unoccupied;
+}
+
+void AOlympiusCharacter::OnDeath()
+{
+	Super::OnDeath();
+	ActionState = EActionState::EAS_Dead;
 }
 
 void AOlympiusCharacter::PlayEquipMontage(const FName& SectionName)

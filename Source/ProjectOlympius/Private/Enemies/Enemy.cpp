@@ -122,26 +122,16 @@ void AEnemy::HandleDamage(float DamageAmount)
 
 void AEnemy::OnDeath()
 {
+	Super::OnDeath();
 	EnemyState = EEnemyState::EES_Dead;
 	ClearAttackTimer();
 	ToggleHealthBarVisibility(false);
 	DisableCapsule();
-	PlayDeathMontage();
 	SetLifeSpan(DeathTimeSpan);
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	ToggleWeaponCollision(ECollisionEnabled::NoCollision);
 }
 
-int32 AEnemy::PlayDeathMontage()
-{
-	const int32 Selection = Super::PlayDeathMontage();
-	TEnumAsByte<EDeathPose> Pose(Selection);
-	if (Pose < EDeathPose::EDP_MAX)
-	{
-		DeathPose = Pose;
-	}
-	return  Selection;
-}
 
 void AEnemy::InitEnemy()
 {

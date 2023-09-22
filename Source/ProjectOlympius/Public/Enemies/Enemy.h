@@ -6,7 +6,6 @@ Description: Parent class for all enemy types
 
 #include "CoreMinimal.h"
 #include "Characters/BaseCharacter.h"
-#include "Characters/CharacterTypes.h"
 #include "Enemy.generated.h"
 
 
@@ -47,11 +46,8 @@ protected:
 	virtual void AttackEnd() override;
 	virtual void HandleDamage(float DamageAmount) override;
 	virtual void OnDeath() override;
-	virtual int32 PlayDeathMontage() override;
 
 	//--------- Protected Variables ---------//
-	UPROPERTY(BlueprintReadOnly)
-		TEnumAsByte<EDeathPose> DeathPose;
 	UPROPERTY(BlueprintReadWrite)
 		EEnemyState EnemyState = EEnemyState::EES_Patrolling;
 

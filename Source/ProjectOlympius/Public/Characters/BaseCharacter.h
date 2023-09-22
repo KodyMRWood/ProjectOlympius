@@ -7,6 +7,7 @@ Description: Base parent class for all character like entities in the game (i.e.
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Interfaces/HitInterface.h"
+#include "Characters/CharacterTypes.h"
 #include "BaseCharacter.generated.h"
 
 
@@ -24,6 +25,8 @@ public:
 	ABaseCharacter();
 	//<AActor>
 	virtual void Tick(float DeltaTime) override;
+
+	FORCEINLINE TEnumAsByte<EDeathPose> GetDeathPose() const { return DeathPose; }
 
 	//--------- Public Variables ---------//
 
@@ -79,6 +82,10 @@ protected:
 		TObjectPtr<AActor> CombatTarget;
 	UPROPERTY(EditAnywhere, Category = Combat)
 	double WarpTargetDistance = 75.0f;
+
+	//--- Montage/Animation ---//
+	UPROPERTY(BlueprintReadOnly)
+		TEnumAsByte<EDeathPose> DeathPose;
 
 private:
 

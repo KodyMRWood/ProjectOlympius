@@ -21,6 +21,7 @@ class PROJECTOLYMPIUS_API UOlympiusAnimInstance : public UAnimInstance
 public:
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float deltaTime) override;
+
 	
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<AOlympiusCharacter> MainCharacter;
@@ -31,6 +32,13 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category = Movement)
 	bool isFalling;
 
-	UPROPERTY(BlueprintReadOnly, Category = "Movement | Character State");
+	UPROPERTY(BlueprintReadOnly, Category = Movement)
 	ECharacterState CharacterState;
+
+	UPROPERTY(BlueprintReadOnly, Category = Movement)
+	EActionState ActionState;
+
+	UPROPERTY(BlueprintReadOnly, Category = Movement)
+	TEnumAsByte<EDeathPose> DeathPose;
+
 };
