@@ -45,6 +45,10 @@ void ABaseCharacter::GetHit_Implementation(const FVector& ImpactPoint, const AAc
 
 void ABaseCharacter::Attack()
 {
+	if (CombatTarget && CombatTarget->ActorHasTag(FName("Dead")))
+	{
+		CombatTarget = nullptr;
+	}
 }
 
 void ABaseCharacter::AttackEnd()
@@ -66,6 +70,7 @@ bool ABaseCharacter::IsAlive()
 
 void ABaseCharacter::OnDeath()
 {
+	Tags.Add(FName("Dead"));
 	PlayDeathMontage();
 }
 
