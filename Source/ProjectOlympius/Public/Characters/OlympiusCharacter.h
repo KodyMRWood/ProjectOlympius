@@ -7,6 +7,7 @@ Description: Functionalty for the main character
 #include "CoreMinimal.h"
 #include "BaseCharacter.h"
 #include "CharacterTypes.h"
+#include "Interfaces/PickUpInterface.h"
 #include "InputActionValue.h"
 #include "OlympiusCharacter.generated.h"
 
@@ -18,10 +19,11 @@ class UCameraComponent;
 class UGroomComponent;
 class UAnimMontage;
 class AItem;
+class ASoul;
 class UPlayerOverlay;
 
 UCLASS()
-class PROJECTOLYMPIUS_API AOlympiusCharacter : public ABaseCharacter
+class PROJECTOLYMPIUS_API AOlympiusCharacter : public ABaseCharacter, public IPickUpInterface
 {
 	GENERATED_BODY()
 
@@ -37,7 +39,10 @@ public:
 	//<IHitInterface>
 	virtual void GetHit_Implementation(const FVector& ImpactPoint, const AActor* Hitter) override;
 
-	FORCEINLINE void SetOverlappingItem(TObjectPtr<AItem> Item) { OverlappingItem = Item; }
+	//<IPickUpInterface>
+	virtual void SetOverlappingItem(TObjectPtr<AItem>  Item) override;
+	virtual void AddSouls(TObjectPtr<ASoul>  Soul) override;
+
 	FORCEINLINE ECharacterState GetCharacterState()  const { return CharacterState; }
 	FORCEINLINE EActionState GetActionState() const { return ActionState; }
 

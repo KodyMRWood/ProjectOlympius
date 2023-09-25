@@ -1,8 +1,8 @@
-#pragma once
 /*
 Author(s): Kody Wood
 Description: Functionalty for the item actor
 */
+#pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"

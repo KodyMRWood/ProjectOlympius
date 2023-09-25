@@ -8,11 +8,11 @@ Description: Functionalty for the item actor
 #include "UObject/ObjectPtr.h"
 #include "Components/SphereComponent.h"
 #include "ProjectOlympius/DebugMacros.h"
-#include "Characters/OlympiusCharacter.h"
+#include "Interfaces/PickUpInterface.h"
 
 AItem::AItem()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	RootItemMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ItemMeshComponent"));
@@ -46,19 +46,19 @@ float AItem::TransformedCos()
 
 void AItem::OnSphereOverlap(UPrimitiveComponent* OverlapperComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	TObjectPtr<AOlympiusCharacter> OlympiusCharacter = Cast<AOlympiusCharacter>(OtherActor);
-	if (OlympiusCharacter)
+	IPickUpInterface* PickUpInterface = Cast<IPickUpInterface>(OtherActor);
+	if (PickUpInterface)
 	{
-		OlympiusCharacter->SetOverlappingItem(this);
+		PickUpInterface->SetOverlappingItem(this);
 	}
 }
 
 void AItem::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	TObjectPtr<AOlympiusCharacter> OlympiusCharacter = Cast<AOlympiusCharacter>(OtherActor);
-	if (OlympiusCharacter)
+	IPickUpInterface* PickUpInterface = Cast<IPickUpInterface>(OtherActor);
+	if (PickUpInterface)
 	{
-		OlympiusCharacter->SetOverlappingItem(nullptr);
+		PickUpInterface->SetOverlappingItem(nullptr);
 	}
 }
 

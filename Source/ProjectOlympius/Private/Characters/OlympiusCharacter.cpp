@@ -90,6 +90,16 @@ void AOlympiusCharacter::GetHit_Implementation(const FVector& ImpactPoint, const
 	}
 }
 
+void AOlympiusCharacter::SetOverlappingItem(TObjectPtr<AItem> Item)
+{
+	OverlappingItem = Item;
+}
+
+void AOlympiusCharacter::AddSouls(TObjectPtr<ASoul> Soul)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Adding Soul"));
+}
+
 void AOlympiusCharacter::BeginPlay()
 {
 	Super::BeginPlay();
