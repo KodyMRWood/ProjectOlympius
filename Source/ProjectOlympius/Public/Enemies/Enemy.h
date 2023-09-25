@@ -13,6 +13,7 @@ class AAIController;
 class UHealthBarComponent;
 class UPawnSensingComponent;
 class AWeapon;
+class ASoul;
 
 UCLASS()
 class PROJECTOLYMPIUS_API AEnemy : public ABaseCharacter
@@ -46,6 +47,7 @@ protected:
 	virtual void AttackEnd() override;
 	virtual void HandleDamage(float DamageAmount) override;
 	virtual void OnDeath() override;
+	void SpawnSoul();
 
 	//--------- Protected Variables ---------//
 	UPROPERTY(BlueprintReadWrite)
@@ -102,10 +104,12 @@ private:
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<AWeapon> WeaponClass;
 
-	//--- AI Behaviour ---//
-	//UPROPERTY()
-	//	TObjectPtr<AActor> CombatTarget;
+	//--- Enemy Properties ---//
+	UPROPERTY(EditAnywhere, Category = "Combat")
+		TSubclassOf<ASoul> SoulClass;
 
+
+	//--- Combat Properties ---//
 	UPROPERTY(EditAnywhere)
 		float ChasingSpeed = 300.0f;
 	UPROPERTY(EditAnywhere)
@@ -123,6 +127,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = Combat)
 		float DeathTimeSpan = 5.0f;
 
+	//--- AI Navigation ---//
 	UPROPERTY(EditInstanceOnly, Category = "AI Navigation")
 		TObjectPtr<AActor> CurrentPatrolTarget;
 	UPROPERTY(EditInstanceOnly, Category = "AI Navigation")

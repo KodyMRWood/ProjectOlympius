@@ -21,6 +21,7 @@ public:
 
 	//--------- Public Variables ---------//
 	FORCEINLINE int32 GetSoulWorth() const { return SoulWorth; }
+	FORCEINLINE void SetSoulWorth(int32 Value) { SoulWorth = Value; }
 protected:
 	//--------- Protected Functions ---------//
 	virtual void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;

@@ -6,6 +6,7 @@
 #include "Components/AttributeComponent.h"
 #include "HUD/HealthBarComponent.h"
 #include "Items/Weapons/Weapon.h"
+#include "Items/Soul.h"
 
 AEnemy::AEnemy()
 {
@@ -69,7 +70,7 @@ void AEnemy::Destroyed()
 void AEnemy::GetHit_Implementation(const FVector& ImpactPoint, const AActor* Hitter)
 {
 	Super::GetHit_Implementation(ImpactPoint, Hitter);
-	if(!IsDead()) ToggleHealthBarVisibility(true);
+	if (!IsDead()) ToggleHealthBarVisibility(true);
 	ClearPatrolTimer();
 	ClearAttackTimer();
 	ToggleWeaponCollision(ECollisionEnabled::NoCollision);
@@ -132,6 +133,20 @@ void AEnemy::OnDeath()
 	SetLifeSpan(DeathTimeSpan);
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	ToggleWeaponCollision(ECollisionEnabled::NoCollision);
+	SpawnSoul();
+}
+
+void AEnemy::SpawnSoul()
+{
+	UWorld* World = GetWorld();
+	if (World && SoulClass && Attributes)
+	{
+		ASoul* NewSoul = World->SpawnActor<ASoul>(SoulClass, GetActorLocation(), GetActorRotation());
+		if (NewSoul)
+		{
+			NewSoul->SetSoulWorth(Attributes->GetSouls());
+		}
+	}
 }
 
 
