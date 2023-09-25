@@ -110,6 +110,7 @@ private:
 	void InitInputSystem();
 	void SetHUDHealth();
 	bool IsUnoccupied();
+	bool HasStamina();
 
 	//--------- Private Variables ---------//
 	//--- Controllers ---//

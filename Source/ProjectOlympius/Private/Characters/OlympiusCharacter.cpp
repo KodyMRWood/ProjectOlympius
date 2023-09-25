@@ -58,6 +58,12 @@ AOlympiusCharacter::AOlympiusCharacter()
 
 void AOlympiusCharacter::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
+	if (Attributes && PlayerOverlay)
+	{
+		Attributes->RegenStamina(DeltaTime);
+		PlayerOverlay->SetStaminaBarPercent(Attributes->GetStaminaPercent());
+	}
 }
 
 float AOlympiusCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInistigator, AActor* DamageCauser)
@@ -167,9 +173,14 @@ void AOlympiusCharacter::Attack()
 
 void AOlympiusCharacter::Dodge()
 {
-	if (!IsUnoccupied()) return;
+	if (!IsUnoccupied() || !HasStamina()) return;
 	PlayDodgeMontage();
 	ActionState = EActionState::EAS_Dodge;
+	if (Attributes && PlayerOverlay)
+	{
+		Attributes->UseStamina(Attributes->GetDodgeCost());
+		PlayerOverlay->SetStaminaBarPercent(Attributes->GetStaminaPercent());
+	}
 }
 
 void AOlympiusCharacter::EPressed()
@@ -324,5 +335,10 @@ void AOlympiusCharacter::SetHUDHealth()
 bool AOlympiusCharacter::IsUnoccupied()
 {
 	return ActionState == EActionState::EAS_Unoccupied;
+}
+
+bool AOlympiusCharacter::HasStamina()
+{
+	return Attributes && Attributes->GetCurrentStamina() - Attributes->GetDodgeCost() > 0.0f;
 }
 

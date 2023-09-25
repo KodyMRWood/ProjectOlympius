@@ -9,23 +9,28 @@ Description: Component that will hold the attributes for the main character or o
 #include "AttributeComponent.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class PROJECTOLYMPIUS_API UAttributeComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+public:
 	UAttributeComponent();
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void ReceiveDamage(float Damage);
 	float GetHealthPercent();
+	void ReceiveDamage(float Damage);
+	float GetStaminaPercent();
+	void RegenStamina(float DeltaTime);
+	void UseStamina(float Value);
 	bool IsAlive();
 
 	void AddGold(int32 GoldAmount);
 	void AddSouls(int32 SoulsAmount);
 
-
+	FORCEINLINE float GetCurrentHealth() const { return CurrentHealth; }
+	FORCEINLINE float GetCurrentStamina() const { return CurrentStamina; }
+	FORCEINLINE float GetDodgeCost() const { return DodgeCost; }
 	FORCEINLINE int32 GetGold() const { return Gold; }
 	FORCEINLINE int32 GetSouls() const { return Souls; }
 
@@ -37,6 +42,14 @@ private:
 		float CurrentHealth;
 	UPROPERTY(EditAnywhere, Category = "Actor Attributes")
 		float MaxHealth;
+	UPROPERTY(EditAnywhere, Category = "Actor Attributes")
+		float CurrentStamina;
+	UPROPERTY(EditAnywhere, Category = "Actor Attributes")
+		float MaxStamina;
+	UPROPERTY(EditAnywhere, Category = "Actor Attributes")
+		float StaminaRegenRate = 2.0f;
+	UPROPERTY(EditAnywhere, Category = "Actor Attributes")
+		float DodgeCost = 20.0f;
 	UPROPERTY(EditAnywhere, Category = "Actor Attributes")
 		int32 Gold;
 	UPROPERTY(EditAnywhere, Category = "Actor Attributes")
