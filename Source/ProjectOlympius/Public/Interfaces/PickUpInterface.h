@@ -11,6 +11,7 @@ Description: Interface that Pick up items will have to dictate when they are pic
 //Forward Declaration
 class AItem;
 class ASoul;
+class ATreasure;
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
@@ -28,4 +29,5 @@ class PROJECTOLYMPIUS_API IPickUpInterface
 public:
 	virtual void SetOverlappingItem(TObjectPtr<AItem> Item);
 	virtual void AddSouls(TObjectPtr<ASoul> Soul);
+	virtual void AddGold(TObjectPtr<ATreasure> Treasure);
 };

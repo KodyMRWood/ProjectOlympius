@@ -12,3 +12,7 @@ void IPickUpInterface::SetOverlappingItem(TObjectPtr<AItem> Item)
 void IPickUpInterface::AddSouls(TObjectPtr<ASoul> Soul)
 {
 }
+
+void IPickUpInterface::AddGold(TObjectPtr<ATreasure> Treasure)
+{
+}

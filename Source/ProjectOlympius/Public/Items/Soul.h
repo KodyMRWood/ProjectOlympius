@@ -20,7 +20,7 @@ public:
 
 
 	//--------- Public Variables ---------//
-
+	FORCEINLINE int32 GetSoulWorth() const { return SoulWorth; }
 protected:
 	//--------- Protected Functions ---------//
 	virtual void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
@@ -30,6 +30,8 @@ private:
 	//--------- Private Functions ---------//
 
 	//--------- Private Variables ---------//
+	UPROPERTY(EditAnywhere, Category = " Soul Properties")
+		int32 SoulWorth;
 
 
 };

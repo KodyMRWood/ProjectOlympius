@@ -12,6 +12,8 @@ Description: CPP for the main character
 #include "GroomComponent.h"
 #include "Items/Item.h"
 #include "Items/Weapons/Weapon.h"
+#include "Items/Soul.h"
+#include "Items/Treasure.h"
 #include "Animation/AnimMontage.h"
 #include "Components/AttributeComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -85,7 +87,7 @@ void AOlympiusCharacter::GetHit_Implementation(const FVector& ImpactPoint, const
 	Super::GetHit_Implementation(ImpactPoint, Hitter);
 	ToggleWeaponCollision(ECollisionEnabled::NoCollision);
 	if (Attributes && Attributes->GetHealthPercent() > 0.0f)
-	{	
+	{
 		ActionState = EActionState::EAS_HitReaction;
 	}
 }
@@ -97,7 +99,21 @@ void AOlympiusCharacter::SetOverlappingItem(TObjectPtr<AItem> Item)
 
 void AOlympiusCharacter::AddSouls(TObjectPtr<ASoul> Soul)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Adding Soul"));
+	if (Attributes)
+	{
+		Attributes->AddSouls(Soul->GetSoulWorth());
+		PlayerOverlay->SetSouls(Attributes->GetSouls());
+	}
+}
+
+void AOlympiusCharacter::AddGold(TObjectPtr<ATreasure> Treasure)
+{
+	if (Attributes)
+	{
+		Attributes->AddGold(Treasure->GetGoldAmount());
+		PlayerOverlay->SetGold(Attributes->GetGold());
+
+	}
 }
 
 void AOlympiusCharacter::BeginPlay()

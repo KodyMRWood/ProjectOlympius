@@ -20,6 +20,7 @@ class UGroomComponent;
 class UAnimMontage;
 class AItem;
 class ASoul;
+class ATreasure;
 class UPlayerOverlay;
 
 UCLASS()
@@ -42,6 +43,7 @@ public:
 	//<IPickUpInterface>
 	virtual void SetOverlappingItem(TObjectPtr<AItem>  Item) override;
 	virtual void AddSouls(TObjectPtr<ASoul>  Soul) override;
+	virtual void AddGold(TObjectPtr<ATreasure> Treasure) override;
 
 	FORCEINLINE ECharacterState GetCharacterState()  const { return CharacterState; }
 	FORCEINLINE EActionState GetActionState() const { return ActionState; }
@@ -111,6 +113,12 @@ private:
 	//--------- Private Variables ---------//
 	//--- Controllers ---//
 	TObjectPtr<APlayerController> PlayerController;
+	
+	//--- Player Stats ---//
+	UPROPERTY(EditAnywhere)
+		int32 Gold;
+	UPROPERTY(EditAnywhere)
+		int32 Souls;
 
 	//--- HUD ---//
 	UPROPERTY();
