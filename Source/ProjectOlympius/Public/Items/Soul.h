@@ -9,7 +9,7 @@ Description: Class derived from Item.h class that controls Soul pick up items
 #include "Soul.generated.h"
 
 //Forward Declarations
-
+class UNiagaraSystem;
 UCLASS()
 class PROJECTOLYMPIUS_API ASoul : public AItem
 {
@@ -30,5 +30,6 @@ private:
 	//--------- Private Functions ---------//
 
 	//--------- Private Variables ---------//
+
 
 };

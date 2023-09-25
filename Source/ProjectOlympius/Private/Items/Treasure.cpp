@@ -10,14 +10,7 @@ void ATreasure::OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor
 	TObjectPtr<AOlympiusCharacter> OlympiusCharacter = Cast<AOlympiusCharacter>(OtherActor);
 	if (OlympiusCharacter)
 	{
-		if (PickupSound)
-		{
-			UGameplayStatics::PlaySoundAtLocation(
-				this,
-				PickupSound,
-				GetActorLocation()
-			);
-		}
+		SpawnPickedUpSound();
 		Destroy();
 	}
 }

@@ -9,6 +9,8 @@ Description: Functionalty for the item actor
 #include "Components/SphereComponent.h"
 #include "ProjectOlympius/DebugMacros.h"
 #include "Interfaces/PickUpInterface.h"
+#include "NiagaraFunctionLibrary.h"
+#include "Kismet/GameplayStatics.h"
 
 AItem::AItem()
 {
@@ -59,6 +61,30 @@ void AItem::OnSphereEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	if (PickUpInterface)
 	{
 		PickUpInterface->SetOverlappingItem(nullptr);
+	}
+}
+
+void AItem::SpawnPickedUpEffect()
+{
+	if (PickedUpEffect)
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+			this,
+			PickedUpEffect,
+			GetActorLocation()
+		);
+	}
+}
+
+void AItem::SpawnPickedUpSound()
+{
+	if (PickedUpSound)
+	{
+		UGameplayStatics::SpawnSoundAtLocation(
+			this,
+			PickedUpSound,
+			GetActorLocation()
+		);
 	}
 }
 
