@@ -67,6 +67,7 @@ protected:
 	//--- Combat ---//
 	virtual bool CanAttack() override;
 	virtual void AttackEnd() override;
+	virtual void DodgeEnd() override;
 	bool CanEquip();
 	void PickUpWeapon(TObjectPtr<AWeapon> Weapon);
 	void Equip();

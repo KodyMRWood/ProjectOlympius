@@ -167,7 +167,9 @@ void AOlympiusCharacter::Attack()
 
 void AOlympiusCharacter::Dodge()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Dodge"));
+	if (!IsUnoccupied()) return;
+	PlayDodgeMontage();
+	ActionState = EActionState::EAS_Dodge;
 }
 
 void AOlympiusCharacter::EPressed()
@@ -198,6 +200,12 @@ bool AOlympiusCharacter::CanAttack()
 
 void AOlympiusCharacter::AttackEnd()
 {
+	ActionState = EActionState::EAS_Unoccupied;
+}
+
+void AOlympiusCharacter::DodgeEnd()
+{
+	Super::DodgeEnd();
 	ActionState = EActionState::EAS_Unoccupied;
 }
 

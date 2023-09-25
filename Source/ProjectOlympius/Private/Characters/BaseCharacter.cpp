@@ -55,6 +55,10 @@ void ABaseCharacter::AttackEnd()
 {
 }
 
+void ABaseCharacter::DodgeEnd()
+{
+}
+
 void ABaseCharacter::HandleDamage(float DamageAmount)
 {
 	if (Attributes)
@@ -116,6 +120,11 @@ FVector ABaseCharacter::GetRotationWarpTarget()
 int32 ABaseCharacter::PlayAttackMontage()
 {
 	return PlayRandomMontageSection(AttackMontage, AttackMontageSections);
+}
+
+void ABaseCharacter::PlayDodgeMontage()
+{
+	PlayMontageSection(DodgeMontage, "Dodge");
 }
 
 void ABaseCharacter::StopAttackMontage()
