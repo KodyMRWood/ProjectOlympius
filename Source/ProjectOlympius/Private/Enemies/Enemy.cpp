@@ -134,6 +134,7 @@ void AEnemy::OnDeath()
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	ToggleWeaponCollision(ECollisionEnabled::NoCollision);
 	SpawnSoul();
+	UE_LOG(LogTemp, Warning, TEXT("Death Pose, %d"), DeathPose);
 }
 
 void AEnemy::SpawnSoul()
