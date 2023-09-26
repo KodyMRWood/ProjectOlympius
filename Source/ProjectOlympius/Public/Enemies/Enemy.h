@@ -50,7 +50,7 @@ protected:
 	void SpawnSoul();
 
 	//--------- Protected Variables ---------//
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 		EEnemyState EnemyState = EEnemyState::EES_Patrolling;
 
 private:
