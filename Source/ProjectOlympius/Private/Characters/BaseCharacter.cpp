@@ -85,11 +85,12 @@ void ABaseCharacter::DisableCapsule()
 
 void ABaseCharacter::ToggleWeaponCollision(ECollisionEnabled::Type CollisionEnabled)
 {
-	if (EquippedWeapon && EquippedWeapon->GetWeaponBox())
+	if (!EquippedWeapon) return;
+	if (EquippedWeapon->GetWeaponBox())
 	{
 		EquippedWeapon->GetWeaponBox()->SetCollisionEnabled(CollisionEnabled);
 	}
-	else if(EquippedWeapon && !EquippedWeapon->GetWeaponBox())
+	else if(!EquippedWeapon->GetWeaponBox())
 	{
 		EquippedWeapon->IgnoreActors.Empty();
 	}

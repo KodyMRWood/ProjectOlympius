@@ -91,6 +91,7 @@ void AOlympiusCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 void AOlympiusCharacter::GetHit_Implementation(const FVector& ImpactPoint, const AActor* Hitter)
 {
 	Super::GetHit_Implementation(ImpactPoint, Hitter);
+	UE_LOG(LogTemp, Warning, TEXT("ENEMY HIT PLAYER"));
 	ToggleWeaponCollision(ECollisionEnabled::NoCollision);
 	if (Attributes && Attributes->GetHealthPercent() > 0.0f)
 	{

@@ -75,7 +75,10 @@ void AEnemy::GetHit_Implementation(const FVector& ImpactPoint, const AActor* Hit
 	ClearAttackTimer();
 	ToggleWeaponCollision(ECollisionEnabled::NoCollision);
 	StopAttackMontage();
-
+	if (IsInsideAttackRadius())
+	{
+		if (!IsDead())StartAttackTimer();
+	}
 }
 
 void AEnemy::BeginPlay()
