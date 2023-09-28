@@ -110,13 +110,15 @@ private:
 
 
 	//--- Combat Properties ---//
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Combat")
 		float ChasingSpeed = 300.0f;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Combat")
 		double FollowRadius = 500.0f;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Combat")
 		double AttackRadius = 150.0f;
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Combat")
+		double AcceptanceRadius = 50.0f;
+	UPROPERTY(EditAnywhere, Category = "Combat")
 		double PatrolRadius = 200.0f;
 
 	FTimerHandle AttackTimer;
