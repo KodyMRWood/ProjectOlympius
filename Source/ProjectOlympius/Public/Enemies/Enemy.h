@@ -46,7 +46,7 @@ protected:
 	virtual void Attack() override;
 	virtual void AttackEnd() override;
 	virtual void HandleDamage(float DamageAmount) override;
-	virtual void OnDeath() override;
+	virtual void OnDeath_Implementation() override;
 	void SpawnSoul();
 
 	//--------- Protected Variables ---------//

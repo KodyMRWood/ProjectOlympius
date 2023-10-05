@@ -40,12 +40,13 @@ protected:
 	virtual void Attack();
 	virtual bool CanAttack();
 	UFUNCTION(BlueprintCallable)
-		virtual void AttackEnd();
+	virtual void AttackEnd();
 	UFUNCTION(BlueprintCallable)
-		virtual void DodgeEnd();
+	virtual void DodgeEnd();
 	virtual void HandleDamage(float DamageAmount);
 	bool IsAlive();
-	virtual void OnDeath();
+	UFUNCTION(BlueprintNativeEvent)
+	void OnDeath();
 
 	void DisableCapsule();
 	UFUNCTION(BlueprintCallable)

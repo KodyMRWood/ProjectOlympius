@@ -72,7 +72,7 @@ bool ABaseCharacter::IsAlive()
 	return Attributes && Attributes->IsAlive();
 }
 
-void ABaseCharacter::OnDeath()
+void ABaseCharacter::OnDeath_Implementation()
 {
 	Tags.Add(FName("Dead"));
 	PlayDeathMontage();

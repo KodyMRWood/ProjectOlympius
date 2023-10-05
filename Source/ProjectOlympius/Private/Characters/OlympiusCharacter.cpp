@@ -144,7 +144,6 @@ void AOlympiusCharacter::Move(const FInputActionValue& value)
 	AddMovementInput(forwardDirection, movementVector.Y);
 	const FVector rightDirection = FRotationMatrix(yawRotation).GetUnitAxis(EAxis::Y);
 	AddMovementInput(rightDirection, movementVector.X);
-	//ActionState = EActionState::EAS_Moving;
 }
 
 void AOlympiusCharacter::Look(const FInputActionValue& value)
@@ -279,9 +278,9 @@ void AOlympiusCharacter::HitReactEnd()
 	ActionState = EActionState::EAS_Unoccupied;
 }
 
-void AOlympiusCharacter::OnDeath()
+void AOlympiusCharacter::OnDeath_Implementation()
 {
-	Super::OnDeath();
+	Super::OnDeath_Implementation();
 	ActionState = EActionState::EAS_Dead;
 }
 

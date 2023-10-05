@@ -77,7 +77,10 @@ void AEnemy::GetHit_Implementation(const FVector& ImpactPoint, const AActor* Hit
 	StopAttackMontage();
 	if (IsInsideAttackRadius())
 	{
-		if (!IsDead())StartAttackTimer();
+		if (!IsDead())
+		{
+			StartAttackTimer();
+		}
 	}
 }
 
@@ -126,9 +129,9 @@ void AEnemy::HandleDamage(float DamageAmount)
 	}
 }
 
-void AEnemy::OnDeath()
+void AEnemy::OnDeath_Implementation()
 {
-	Super::OnDeath();
+	Super::OnDeath_Implementation();
 	EnemyState = EEnemyState::EES_Dead;
 	ClearAttackTimer();
 	ToggleHealthBarVisibility(false);

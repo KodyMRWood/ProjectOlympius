@@ -81,7 +81,7 @@ protected:
 		void FinishEquipping();
 	UFUNCTION(BlueprintCallable)
 		void HitReactEnd();
-	virtual void OnDeath() override;
+	virtual void OnDeath_Implementation() override;
 
 
 	//--- Montage ---//
