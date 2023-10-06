@@ -188,6 +188,10 @@ void AOlympiusCharacter::EPressed()
 	TObjectPtr<AWeapon> OverlappingWeapon = Cast<AWeapon>(OverlappingItem);
 	if (OverlappingWeapon)
 	{
+		if (EquippedWeapon)
+		{
+			EquippedWeapon->Destroy();
+		}
 		PickUpWeapon(OverlappingWeapon);
 	}
 	else

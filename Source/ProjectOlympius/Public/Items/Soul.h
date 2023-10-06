@@ -17,13 +17,14 @@ class PROJECTOLYMPIUS_API ASoul : public AItem
 	
 public:
 	//--------- Public Functions ---------//
-
+	virtual void Tick(float DeltaTime) override;
 
 	//--------- Public Variables ---------//
 	FORCEINLINE int32 GetSoulWorth() const { return SoulWorth; }
 	FORCEINLINE void SetSoulWorth(int32 Value) { SoulWorth = Value; }
 protected:
 	//--------- Protected Functions ---------//
+	virtual void BeginPlay() override;
 	virtual void OnSphereOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) override;
 
 	//--------- Protected Variables ---------//
@@ -33,6 +34,11 @@ private:
 	//--------- Private Variables ---------//
 	UPROPERTY(EditAnywhere, Category = " Soul Properties")
 		int32 SoulWorth;
+
+	double DesiredZ;
+
+	UPROPERTY(EditAnywhere)
+	float DriftRate = -15.0f;
 
 
 };

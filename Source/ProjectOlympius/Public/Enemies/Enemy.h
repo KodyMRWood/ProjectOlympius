@@ -105,26 +105,27 @@ private:
 		TSubclassOf<AWeapon> WeaponClass;
 
 	//--- Enemy Properties ---//
-	UPROPERTY(EditAnywhere, Category = "Combat")
+	UPROPERTY(EditAnywhere, Category = Combat)
 		TSubclassOf<ASoul> SoulClass;
-
+	UPROPERTY(EditAnywhere, Category = Combat)
+		FVector SoulSpawnOffset;
 
 	//--- Combat Properties ---//
-	UPROPERTY(EditAnywhere, Category = "Combat")
+	UPROPERTY(EditAnywhere, Category = Combat)
 		float ChasingSpeed = 300.0f;
-	UPROPERTY(EditAnywhere, Category = "Combat")
+	UPROPERTY(EditAnywhere, Category = Combat)
 		double FollowRadius = 500.0f;
-	UPROPERTY(EditAnywhere, Category = "Combat")
+	UPROPERTY(EditAnywhere, Category = Combat)
 		double AttackRadius = 150.0f;
-	UPROPERTY(EditAnywhere, Category = "Combat")
+	UPROPERTY(EditAnywhere, Category = Combat)
 		double AcceptanceRadius = 50.0f;
-	UPROPERTY(EditAnywhere, Category = "Combat")
+	UPROPERTY(EditAnywhere, Category = Combat)
 		double PatrolRadius = 200.0f;
 
 	FTimerHandle AttackTimer;
-	UPROPERTY(EditAnywhere, Category = "Combat")
+	UPROPERTY(EditAnywhere, Category = Combat)
 		float AttackMin = 0.5f;
-	UPROPERTY(EditAnywhere, Category = "Combat")
+	UPROPERTY(EditAnywhere, Category = Combat)
 		float AttackMax = 1.0f;
 	UPROPERTY(EditAnywhere, Category = Combat)
 		float DeathTimeSpan = 5.0f;
